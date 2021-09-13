@@ -14,7 +14,7 @@ function App() {
           types={INGREDIENTS_TYPES}
           ingredients={INGREDIENTS_DATA}
         />
-        <BurgerConstructor ingredients={INGREDIENTS_DATA} />
+        <BurgerConstructor ingredients={INGREDIENTS_DATA.filter(i => i.type !== 'bun')} />
       </main>
     </>
   );

@@ -2,6 +2,10 @@ import React from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard from './ingredient-card/ingredient-card';
 import styles from './burger-ingredients.module.css';
+import {
+  arrayOfTypesPropType,
+  arrayOfIngredientsPropType,
+} from '../../utils/prop-schemas';
 
 function BurgerIngredients({ types, ingredients }) {
   const [currentTab, setCurrentTab] = React.useState(types[0].slug);
@@ -41,5 +45,10 @@ function BurgerIngredients({ types, ingredients }) {
     </section>
   );
 }
+
+BurgerIngredients.propTypes = {
+  types: arrayOfTypesPropType,
+  ingredients: arrayOfIngredientsPropType,
+};
 
 export default BurgerIngredients;

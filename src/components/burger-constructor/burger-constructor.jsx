@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   ConstructorElement,
@@ -6,6 +5,7 @@ import {
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
+import { arrayOfIngredientsPropType } from '../../utils/prop-schemas';
 
 function BurgerConstructor({ ingredients }) {
   const top = {
@@ -62,5 +62,9 @@ function BurgerConstructor({ ingredients }) {
     </section>
   );
 }
+
+BurgerConstructor.propTypes = {
+  ingredients: arrayOfIngredientsPropType,
+};
 
 export default BurgerConstructor;

@@ -30,11 +30,10 @@ function BurgerIngredients({ types, ingredients }) {
           <article key={index} className={`mt-10 ${styles.ingredients}`}>
             <h2 className="text text_type_main-medium mb-6">{type.title}</h2>
             <ul className={`${styles.cards} pl-4`}>
-              {console.log(ingredients.filter((i) => i.type === type.slug))}
               {ingredients
                 .filter((i) => i.type === type.slug)
                 .map((i) => (
-                  <li key={i.name}>
+                  <li key={i._id}>
                     <IngredientCard data={i} quantity={1} />
                   </li>
                 ))}
@@ -47,8 +46,8 @@ function BurgerIngredients({ types, ingredients }) {
 }
 
 BurgerIngredients.propTypes = {
-  types: arrayOfTypesPropType,
-  ingredients: arrayOfIngredientsPropType,
+  types: arrayOfTypesPropType.isRequired,
+  ingredients: arrayOfIngredientsPropType.isRequired,
 };
 
 export default BurgerIngredients;

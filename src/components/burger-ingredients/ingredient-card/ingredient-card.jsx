@@ -4,7 +4,7 @@ import {
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-card.module.css';
-import { ingredientPropType } from '../../utils/prop-schemas';
+import { ingredientPropType } from '../../../utils/prop-schemas';
 
 function IngredientCard({ data, quantity }) {
   return (
@@ -25,7 +25,7 @@ function IngredientCard({ data, quantity }) {
 }
 
 IngredientCard.propTypes = {
-  data: ingredientPropType,
+  data: ingredientPropType.isRequired,
   quantity: PropTypes.number,
 };
 

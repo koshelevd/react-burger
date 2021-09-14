@@ -1,0 +1,41 @@
+.section {
+  max-height: 912px;
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollArea {
+  list-style: none;
+  padding: 0;
+  max-height: 460px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-color: #8585ad #2f2f37;
+  scrollbar-width: thin;
+}
+
+.scrollArea::-webkit-scrollbar {
+  width: 12px;
+}
+.scrollArea::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+.scrollArea::-webkit-scrollbar-thumb {
+  background: #8585ad;
+  border: 3px solid #2f2f37;
+  border-radius: 6px;
+}
+
+.element {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.total {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}

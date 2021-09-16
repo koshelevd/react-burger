@@ -12,7 +12,7 @@ import {
 function BurgerIngredients({ types, ingredients }) {
   const [currentTab, setCurrentTab] = useState(types[0].slug);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState({});
+  const [selectedIngredient, setSelectedIngredient] = useState(null);
 
   function handleModalToggle(ingredient) {
     if (ingredient) {

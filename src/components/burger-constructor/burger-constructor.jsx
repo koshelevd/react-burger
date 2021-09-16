@@ -8,16 +8,21 @@ import {
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import styles from './burger-constructor.module.css';
-import {
-  ingredientPropType,
-  arrayOfIngredientsPropType,
-} from '../../utils/prop-schemas';
-import {} from '../../utils/data';
+import { BASE_BUN } from '../../utils/data';
+import { arrayOfIngredientsPropType } from '../../utils/prop-schemas';
 
-function BurgerConstructor({ ingredients, topBun, bottomBun }) {
+function BurgerConstructor({ ingredients }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const topBun = {
+    ...BASE_BUN,
+    name: 'Краторная булка N-200i (Верх)',
+  };
+  const bottomBun = {
+    ...BASE_BUN,
+    name: 'Краторная булка N-200i (Низ)',
+  };
 
-  function handleModalToggle(ingredient) {
+  function handleModalToggle() {
     setIsModalOpen(!isModalOpen);
   }
 
@@ -77,8 +82,6 @@ function BurgerConstructor({ ingredients, topBun, bottomBun }) {
 
 BurgerConstructor.propTypes = {
   ingredients: arrayOfIngredientsPropType.isRequired,
-  topBun: ingredientPropType.isRequired,
-  bottomBun: ingredientPropType,
 };
 
 export default BurgerConstructor;

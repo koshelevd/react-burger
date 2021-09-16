@@ -1,5 +1,6 @@
 import styles from './ingredient-details.module.css';
 import { ingredientPropType } from '../../utils/prop-schemas';
+import { BASE_BUN } from '../../utils/data';
 
 function IngredientDetails({ data }) {
   return (
@@ -32,8 +33,12 @@ function IngredientDetails({ data }) {
   );
 }
 
+IngredientDetails.defaultProps = {
+  data: BASE_BUN,
+};
+
 IngredientDetails.propTypes = {
-  data: ingredientPropType.isRequired,
+  data: ingredientPropType,
 };
 
 export default IngredientDetails;

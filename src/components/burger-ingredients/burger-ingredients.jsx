@@ -1,6 +1,8 @@
-import React from 'react';
+import { useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard from './ingredient-card/ingredient-card';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
 import styles from './burger-ingredients.module.css';
 import {
   arrayOfTypesPropType,
@@ -8,7 +10,23 @@ import {
 } from '../../utils/prop-schemas';
 
 function BurgerIngredients({ types, ingredients }) {
-  const [currentTab, setCurrentTab] = React.useState(types[0].slug);
+  const [currentTab, setCurrentTab] = useState(types[0].slug);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedIngredient, setSelectedIngredient] = useState(null);
+
+  function handleModalToggle(ingredient) {
+    if (ingredient) {
+      setSelectedIngredient(ingredient);
+    }
+    setIsModalOpen(!isModalOpen);
+  }
+
+  const modal = (
+    <Modal header="Детали ингредиента" onClose={handleModalToggle}>
+      <IngredientDetails data={selectedIngredient} />
+    </Modal>
+  );
+
   return (
     <section className={styles.section}>
       <h2 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h2>
@@ -33,7 +51,7 @@ function BurgerIngredients({ types, ingredients }) {
               {ingredients
                 .filter((i) => i.type === type.slug)
                 .map((i) => (
-                  <li key={i._id}>
+                  <li key={i._id} onClick={() => handleModalToggle(i)}>
                     <IngredientCard data={i} quantity={1} />
                   </li>
                 ))}
@@ -41,6 +59,7 @@ function BurgerIngredients({ types, ingredients }) {
           </article>
         ))}
       </div>
+      {isModalOpen && modal}
     </section>
   );
 }

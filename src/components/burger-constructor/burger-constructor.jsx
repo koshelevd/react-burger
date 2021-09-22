@@ -1,21 +1,37 @@
+import { useState } from 'react';
 import {
   Button,
   ConstructorElement,
   CurrencyIcon,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import Modal from '../modal/modal';
+import OrderDetails from '../order-details/order-details';
 import styles from './burger-constructor.module.css';
+import { BASE_BUN } from '../../utils/data';
 import { arrayOfIngredientsPropType } from '../../utils/prop-schemas';
 
 function BurgerConstructor({ ingredients }) {
-  const top = {
-    ...ingredients[0],
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const topBun = {
+    ...BASE_BUN,
     name: 'Краторная булка N-200i (Верх)',
   };
-  const bottom = {
-    ...ingredients[0],
+  const bottomBun = {
+    ...BASE_BUN,
     name: 'Краторная булка N-200i (Низ)',
   };
+
+  function handleModalToggle() {
+    setIsModalOpen(!isModalOpen);
+  }
+
+  const modal = (
+    <Modal onClose={handleModalToggle}>
+      <OrderDetails />
+    </Modal>
+  );
+
   return (
     <section className={styles.section}>
       <div className="mt-25 mb-10 ml-4">
@@ -23,9 +39,9 @@ function BurgerConstructor({ ingredients }) {
           <ConstructorElement
             type="top"
             isLocked={true}
-            text={top.name}
-            price={top.price}
-            thumbnail={top.image}
+            text={topBun.name}
+            price={topBun.price}
+            thumbnail={topBun.image}
           />
         </span>
         <ul className={`${styles.scrollArea} mt-4 mb-4`}>
@@ -44,14 +60,14 @@ function BurgerConstructor({ ingredients }) {
           <ConstructorElement
             type="bottom"
             isLocked={true}
-            text={bottom.name}
-            price={bottom.price}
-            thumbnail={bottom.image}
+            text={bottomBun.name}
+            price={bottomBun.price}
+            thumbnail={bottomBun.image}
           />
         </span>
       </div>
       <div className={`${styles.total} mr-5`}>
-        <Button type="primary" size="large">
+        <Button type="primary" size="large" onClick={handleModalToggle}>
           Оформить заказ
         </Button>
         <p className={`${styles.price} mr-10`}>
@@ -59,6 +75,7 @@ function BurgerConstructor({ ingredients }) {
           <CurrencyIcon type="primary" />
         </p>
       </div>
+      {isModalOpen && modal}
     </section>
   );
 }

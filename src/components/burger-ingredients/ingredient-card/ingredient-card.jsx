@@ -7,6 +7,7 @@ import styles from './ingredient-card.module.css';
 import { ingredientPropType } from '../../../utils/prop-schemas';
 
 function IngredientCard({ data, quantity }) {
+  console.log('IngredientCard render');
   return (
     <figure className={styles.figure}>
       <img src={data.image} alt={data.name} className={styles.picture} />

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard from './ingredient-card/ingredient-card';
 import IngredientDetails from '../ingredient-details/ingredient-details';
@@ -8,9 +8,12 @@ import {
   arrayOfTypesPropType,
   arrayOfIngredientsPropType,
 } from '../../utils/prop-schemas';
+import { IngredientsContext } from '../../contexts/ingredients-context';
 
-function BurgerIngredients({ types, ingredients }) {
-  const [currentTab, setCurrentTab] = useState(types[0].slug);
+const BurgerIngredients = React.memo(() => {
+  const [ingredients] = useContext(IngredientsContext);
+  console.log('BurgerIngredients render');
+  const [currentTab, setCurrentTab] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
 
@@ -32,7 +35,7 @@ function BurgerIngredients({ types, ingredients }) {
       <h2 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h2>
 
       <div className={styles.tabs}>
-        {types.map((type) => (
+        {ingredients.types.map((type) => (
           <Tab
             key={type.slug}
             value={type.slug}
@@ -44,11 +47,11 @@ function BurgerIngredients({ types, ingredients }) {
         ))}
       </div>
       <div className={styles.scrollArea}>
-        {types.map((type, index) => (
+        {ingredients.types.map((type, index) => (
           <article key={index} className={`mt-10 ${styles.ingredients}`}>
             <h2 className="text text_type_main-medium mb-6">{type.title}</h2>
             <ul className={`${styles.cards} pl-4`}>
-              {ingredients
+              {ingredients.all
                 .filter((i) => i.type === type.slug)
                 .map((i) => (
                   <li key={i._id} onClick={() => handleModalToggle(i)}>
@@ -62,7 +65,7 @@ function BurgerIngredients({ types, ingredients }) {
       {isModalOpen && modal}
     </section>
   );
-}
+});
 
 BurgerIngredients.propTypes = {
   types: arrayOfTypesPropType.isRequired,

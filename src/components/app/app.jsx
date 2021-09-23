@@ -5,16 +5,23 @@ import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
 import styles from './app.module.css';
 import { INGREDIENTS_TYPES } from '../../utils/data';
 import api from '../../utils/api';
+import { IngredientsContext } from '../../contexts/ingredients-context';
 
 function App() {
-  const [ingredients, setIngredients] = useState([]);
-  const [notBuns, setNotBuns] = useState([]);
+  console.log('App render');
+  const ingredientsState = useState({
+    all: [],
+    buns: [],
+    types: INGREDIENTS_TYPES,
+  });
+  const [ingredients, setIngredients] = ingredientsState;
+  const [rawData, setRawData] = useState([]);
 
   useEffect(() => {
     api
       .getIngredients()
       .then((result) => {
-        setIngredients(result.data);
+        setRawData(result.data);
       })
       .catch((error) => {
         console.log(error);
@@ -22,20 +29,21 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setNotBuns(ingredients.filter((i) => i.type !== 'bun'));
-  }, [ingredients]);
+    setIngredients({
+      ...ingredients,
+      all: rawData,
+      buns: [], // rawData.filter((i) => i.type !== 'bun'),
+    });
+  }, [rawData, ingredients]);
 
   return (
-    <>
+    <IngredientsContext.Provider value={ingredientsState}>
       <AppHeader />
       <main className={`${styles.main} pl-5 pr-5`}>
-        <BurgerIngredients
-          types={INGREDIENTS_TYPES}
-          ingredients={ingredients}
-        />
-        <BurgerConstructor ingredients={notBuns} />
+        <BurgerIngredients />
+        {/* <BurgerConstructor /> */}
       </main>
-    </>
+    </IngredientsContext.Provider>
   );
 }
 

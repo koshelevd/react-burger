@@ -5,7 +5,7 @@ import { BASE_BUN } from '../../utils/data';
 function IngredientDetails({ data }) {
   return (
     <figure className={styles.root}>
-      <img src={data.image_large} alt={data.name} />
+      <img src={data.image_large} alt={data.name} className={styles.picture} />
       <figcaption className="text text_type_main-medium mt-4 mb-8">
         {data.name}
       </figcaption>

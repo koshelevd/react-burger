@@ -6,6 +6,11 @@
   align-items: center;
 }
 
+.picture {
+  width: 240px;
+  height: 120px;
+}
+
 .nutrients {
   display: flex;
   max-width: 520px;

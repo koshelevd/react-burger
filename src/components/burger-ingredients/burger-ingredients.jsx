@@ -4,22 +4,47 @@ import IngredientCard from './ingredient-card/ingredient-card';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import styles from './burger-ingredients.module.css';
-import {
-  arrayOfTypesPropType,
-  arrayOfIngredientsPropType,
-} from '../../utils/prop-schemas';
 import { IngredientsContext } from '../../contexts/ingredients-context';
+import { INGREDIENTS_TYPES } from '../../utils/data';
 
 const BurgerIngredients = React.memo(() => {
-  const [ingredients] = useContext(IngredientsContext);
-  console.log('BurgerIngredients render');
+  const [ingredients, setIngredients] = useContext(IngredientsContext);
+  const [types] = useState(INGREDIENTS_TYPES);
   const [currentTab, setCurrentTab] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
 
+  function addIngredient(ingredient) {
+    if (ingredient.type === 'bun') {
+      setIngredients((prevState) =>
+        prevState.map((i) => {
+          if (i._id === ingredient._id) {
+            return { ...i, count: 1 };
+          } else if (i.type === 'bun') {
+            return { ...i, count: 0 };
+          }
+          return i;
+        }),
+      );
+    } else {
+      setIngredients((prevState) =>
+        prevState.map((i) => {
+          // console.log(ingredient);
+          if (i._id === ingredient._id && !!i.count) {
+            return { ...i, count: i.count + 1 };
+          } else if (i._id === ingredient._id) {
+            return { ...i, count: 1 };
+          }
+          return i;
+        }),
+      );
+    }
+  }
+
   function handleModalToggle(ingredient) {
     if (ingredient) {
       setSelectedIngredient(ingredient);
+      addIngredient(ingredient);
     }
     setIsModalOpen(!isModalOpen);
   }
@@ -35,7 +60,7 @@ const BurgerIngredients = React.memo(() => {
       <h2 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h2>
 
       <div className={styles.tabs}>
-        {ingredients.types.map((type) => (
+        {types.map((type) => (
           <Tab
             key={type.slug}
             value={type.slug}
@@ -47,15 +72,15 @@ const BurgerIngredients = React.memo(() => {
         ))}
       </div>
       <div className={styles.scrollArea}>
-        {ingredients.types.map((type, index) => (
+        {types.map((type, index) => (
           <article key={index} className={`mt-10 ${styles.ingredients}`}>
             <h2 className="text text_type_main-medium mb-6">{type.title}</h2>
             <ul className={`${styles.cards} pl-4`}>
-              {ingredients.all
+              {ingredients
                 .filter((i) => i.type === type.slug)
                 .map((i) => (
                   <li key={i._id} onClick={() => handleModalToggle(i)}>
-                    <IngredientCard data={i} quantity={1} />
+                    <IngredientCard data={i} />
                   </li>
                 ))}
             </ul>
@@ -66,10 +91,5 @@ const BurgerIngredients = React.memo(() => {
     </section>
   );
 });
-
-BurgerIngredients.propTypes = {
-  types: arrayOfTypesPropType.isRequired,
-  ingredients: arrayOfIngredientsPropType.isRequired,
-};
 
 export default BurgerIngredients;

@@ -22,7 +22,7 @@ function OrderDetails({ orderId = DEFAULT_ORDER_ID }) {
 }
 
 OrderDetails.propTypes = {
-  orderId: PropTypes.string,
+  orderId: PropTypes.number,
 };
 
 export default OrderDetails;

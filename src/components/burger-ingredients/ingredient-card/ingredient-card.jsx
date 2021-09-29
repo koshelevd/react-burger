@@ -3,8 +3,8 @@ import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './ingredient-card.module.css';
 import { ingredientPropType } from '../../../utils/prop-schemas';
+import styles from './ingredient-card.module.css';
 
 function IngredientCard({ data }) {
   return (

@@ -1,57 +1,54 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  ADD_INGREDIENT,
+  getIngredients,
+} from '../../services/actions/ingredients';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard from './ingredient-card/ingredient-card';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import styles from './burger-ingredients.module.css';
-import { IngredientsContext } from '../../contexts/ingredients-context';
-import { INGREDIENTS_TYPES } from '../../utils/data';
+import { SET_SELECTED_INGREDIENT } from '../../services/actions';
 
 const BurgerIngredients = React.memo(() => {
-  const [ingredients, setIngredients] = useContext(IngredientsContext);
-  const [types] = useState(INGREDIENTS_TYPES);
+  const dispatch = useDispatch();
+  const { ingredients, isLoading, types } = useSelector((state) => ({
+    ingredients: state.ingredients.all,
+    isLoading: state.ingredients.isRequestProcessing,
+    types: state.ingredients.types,
+  }));
+  const state = useSelector((state) => state);
+
   const [currentTab, setCurrentTab] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState(null);
 
-  function addIngredient(ingredient) {
-    if (ingredient.type === 'bun') {
-      setIngredients((prevState) =>
-        prevState.map((i) => {
-          if (i._id === ingredient._id) {
-            return { ...i, count: 1 };
-          } else if (i.type === 'bun') {
-            return { ...i, count: 0 };
-          }
-          return i;
-        }),
-      );
-    } else {
-      setIngredients((prevState) =>
-        prevState.map((i) => {
-          // console.log(ingredient);
-          if (i._id === ingredient._id && !!i.count) {
-            return { ...i, count: i.count + 1 };
-          } else if (i._id === ingredient._id) {
-            return { ...i, count: 1 };
-          }
-          return i;
-        }),
-      );
-    }
-  }
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, []);
+
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
 
   function handleModalToggle(ingredient) {
     if (ingredient) {
-      setSelectedIngredient(ingredient);
-      addIngredient(ingredient);
+      dispatch({
+        type: SET_SELECTED_INGREDIENT,
+        ingredient,
+      });
+
+      dispatch({
+        type: ADD_INGREDIENT,
+        ingredient,
+      });
     }
     setIsModalOpen(!isModalOpen);
   }
 
   const modal = (
     <Modal header="Детали ингредиента" onClose={handleModalToggle}>
-      <IngredientDetails data={selectedIngredient} />
+      <IngredientDetails />
     </Modal>
   );
 

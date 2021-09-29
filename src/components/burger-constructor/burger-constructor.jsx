@@ -1,5 +1,11 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  ADD_INGREDIENT,
+  getIngredients,
+  REMOVE_INGREDIENT,
+} from '../../services/actions/ingredients';
 import {
   Button,
   ConstructorElement,
@@ -9,11 +15,16 @@ import {
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import styles from './burger-constructor.module.css';
-import { IngredientsContext } from '../../contexts/ingredients-context';
+
 import api from '../../utils/api';
 
 const BurgerConstructor = React.memo(() => {
-  const [ingredients, setIngredients] = useContext(IngredientsContext);
+  const dispatch = useDispatch();
+  const { ingredients, isLoading, types } = useSelector((state) => ({
+    ingredients: state.ingredients.all,
+    isLoading: state.ingredients.isRequestProcessing,
+    types: state.ingredients.types,
+  }));
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [topBun, setTopBun] = useState(null);
   const [bottomBun, setBottomBun] = useState(null);
@@ -77,16 +88,10 @@ const BurgerConstructor = React.memo(() => {
   }
 
   function deleteIngredient(ingredient) {
-    if (ingredient.type !== 'bun') {
-      setIngredients((prevState) =>
-        prevState.map((i) => {
-          if (i._id === ingredient._id && !!i.count) {
-            return { ...i, count: i.count - 1 };
-          }
-          return i;
-        }),
-      );
-    }
+    dispatch({
+      type: REMOVE_INGREDIENT,
+      ingredient,
+    });
   }
 
   const modal = (

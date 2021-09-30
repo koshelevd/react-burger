@@ -1,13 +1,19 @@
 import { combineReducers } from 'redux';
 import ingredientsReducer from './ingredients';
+import compositionReducer from './composition';
 import {
-  SELECT_BUN,
+  CLOSE_MODAL,
+  OPEN_INGREDIENT_MODAL,
+  OPEN_ORDER_MODAL,
   SET_SELECTED_INGREDIENT,
   UNSET_SELECTED_INGREDIENT,
 } from '../actions';
 
 const initialSelectedIngredient = null;
-const initialActiveBun = null;
+const initialIsModalOpen = {
+  ingredient: false,
+  order: false,
+};
 
 const selectedIngredientReducer = (
   state = initialSelectedIngredient,
@@ -26,6 +32,29 @@ const selectedIngredientReducer = (
   }
 };
 
+const isModalOpenReducer = (state = initialIsModalOpen, action) => {
+  switch (action.type) {
+    case OPEN_INGREDIENT_MODAL: {
+      return {
+        ...initialIsModalOpen,
+        ingredient: true,
+      };
+    }
+    case OPEN_ORDER_MODAL: {
+      return {
+        ...initialIsModalOpen,
+        order: true,
+      };
+    }
+    case CLOSE_MODAL: {
+      return initialIsModalOpen;
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
 // const activeBunReducer = (state = initialActiveBun, action) => {
 //   switch (action.type) {
 //     case SELECT_BUN: {
@@ -37,13 +66,10 @@ const selectedIngredientReducer = (
 //   }
 // };
 
-const compositionReducer = (state, action) => {
-  return null;
-};
-
 export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
-  compositionReducer,
+  composition: compositionReducer,
   selectedIngredient: selectedIngredientReducer,
+  isModalOpen: isModalOpenReducer,
   // activeBun: activeBunReducer,
 });

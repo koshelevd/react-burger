@@ -1,11 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  ADD_INGREDIENT,
-  getIngredients,
-  REMOVE_INGREDIENT,
-} from '../../services/actions/ingredients';
+import { REMOVE_INGREDIENT } from '../../services/actions/ingredients';
 import {
   Button,
   ConstructorElement,
@@ -17,6 +13,8 @@ import OrderDetails from '../order-details/order-details';
 import styles from './burger-constructor.module.css';
 
 import api from '../../utils/api';
+import { REMOVE_COMPOSITION_ITEM } from '../../services/actions/composition';
+import { OPEN_ORDER_MODAL } from '../../services/actions';
 
 const BurgerConstructor = React.memo(() => {
   const dispatch = useDispatch();
@@ -25,23 +23,11 @@ const BurgerConstructor = React.memo(() => {
     isLoading: state.ingredients.isRequestProcessing,
     types: state.ingredients.types,
   }));
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const composition = useSelector((state) => state.composition);
+  const isModalOpen = useSelector((state) => state.isModalOpen.order);
   const [topBun, setTopBun] = useState(null);
   const [bottomBun, setBottomBun] = useState(null);
   const [orderId, setOrderId] = useState(0);
-
-  const composition = useMemo(() => {
-    const choosen = ingredients.filter(
-      (i) => i.type !== 'bun' && !!i.count && i.count > 0,
-    );
-    const result = [];
-    choosen.forEach((item) => {
-      for (let step = 0; step < item.count; step++) {
-        result.push({ ...item, _key: uuid() });
-      }
-    });
-    return result;
-  }, [ingredients]);
 
   const totalPrice = useMemo(
     () =>
@@ -69,7 +55,7 @@ const BurgerConstructor = React.memo(() => {
   }, [ingredients]);
 
   function handleModalToggle() {
-    setIsModalOpen(!isModalOpen);
+    dispatch({ type: OPEN_ORDER_MODAL });
   }
 
   function handleCheckout() {
@@ -87,10 +73,14 @@ const BurgerConstructor = React.memo(() => {
       .catch((err) => console.log(err));
   }
 
-  function deleteIngredient(ingredient) {
+  function deleteIngredient(ingredient, index) {
     dispatch({
       type: REMOVE_INGREDIENT,
       ingredient,
+    });
+    dispatch({
+      type: REMOVE_COMPOSITION_ITEM,
+      index,
     });
   }
 
@@ -117,14 +107,14 @@ const BurgerConstructor = React.memo(() => {
           )}
         </span>
         <ul className={`${styles.scrollArea} mt-4 mb-4`}>
-          {composition.map((item) => (
+          {composition.map((item, index) => (
             <li key={item._key} className={`mb-4 ${styles.element}`}>
               <DragIcon type="primary" />
               <ConstructorElement
                 text={item.name}
                 price={item.price}
                 thumbnail={item.image}
-                handleClose={() => deleteIngredient(item)}
+                handleClose={() => deleteIngredient(item, index)}
               />
             </li>
           ))}

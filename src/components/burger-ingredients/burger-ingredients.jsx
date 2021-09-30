@@ -4,24 +4,30 @@ import {
   ADD_INGREDIENT,
   getIngredients,
 } from '../../services/actions/ingredients';
+import { ADD_COMPOSITION_ITEM } from '../../services/actions/composition';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard from './ingredient-card/ingredient-card';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import styles from './burger-ingredients.module.css';
-import { SET_SELECTED_INGREDIENT } from '../../services/actions';
+import {
+  OPEN_INGREDIENT_MODAL,
+  SET_SELECTED_INGREDIENT,
+} from '../../services/actions';
 
 const BurgerIngredients = React.memo(() => {
   const dispatch = useDispatch();
-  const { ingredients, isLoading, types } = useSelector((state) => ({
-    ingredients: state.ingredients.all,
-    isLoading: state.ingredients.isRequestProcessing,
-    types: state.ingredients.types,
-  }));
+  const { ingredients, isLoading, types, isModalOpen } = useSelector(
+    (state) => ({
+      ingredients: state.ingredients.all,
+      isLoading: state.ingredients.isRequestProcessing,
+      types: state.ingredients.types,
+      isModalOpen: state.isModalOpen.ingredient,
+    }),
+  );
   const state = useSelector((state) => state);
 
-  const [currentTab, setCurrentTab] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [currentTab, setCurrentTab] = useState(null);
 
   useEffect(() => {
     dispatch(getIngredients());
@@ -31,23 +37,28 @@ const BurgerIngredients = React.memo(() => {
     console.log(state);
   }, [state]);
 
-  function handleModalToggle(ingredient) {
-    if (ingredient) {
+  function handleIngredientClick(ingredient) {
+    dispatch({
+      type: SET_SELECTED_INGREDIENT,
+      ingredient,
+    });
+
+    dispatch({
+      type: ADD_INGREDIENT,
+      ingredient,
+    });
+
+    if (ingredient.type !== 'bun')
       dispatch({
-        type: SET_SELECTED_INGREDIENT,
+        type: ADD_COMPOSITION_ITEM,
         ingredient,
       });
 
-      dispatch({
-        type: ADD_INGREDIENT,
-        ingredient,
-      });
-    }
-    setIsModalOpen(!isModalOpen);
+    dispatch({ type: OPEN_INGREDIENT_MODAL });
   }
 
   const modal = (
-    <Modal header="Детали ингредиента" onClose={handleModalToggle}>
+    <Modal header="Детали ингредиента">
       <IngredientDetails />
     </Modal>
   );
@@ -61,8 +72,8 @@ const BurgerIngredients = React.memo(() => {
           <Tab
             key={type.slug}
             value={type.slug}
-            active={currentTab === type.slug}
-            onClick={setCurrentTab}
+            // active={currentTab === type.slug}
+            // onClick={setCurrentTab}
           >
             {type.title}
           </Tab>
@@ -76,7 +87,7 @@ const BurgerIngredients = React.memo(() => {
               {ingredients
                 .filter((i) => i.type === type.slug)
                 .map((i) => (
-                  <li key={i._id} onClick={() => handleModalToggle(i)}>
+                  <li key={i._id} onClick={() => handleIngredientClick(i)}>
                     <IngredientCard data={i} />
                   </li>
                 ))}

@@ -6,7 +6,7 @@ import styles from './ingredient-details.module.css';
 function IngredientDetails() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.selectedIngredient);
-  useEffect(() => () => dispatch({ type: UNSET_SELECTED_INGREDIENT }), [data]);
+  useEffect(() => () => dispatch({ type: UNSET_SELECTED_INGREDIENT }), [data, dispatch]);
 
   return (
     <figure className={styles.root}>

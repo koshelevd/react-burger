@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import ingredientsReducer from './ingredients';
 import compositionReducer from './composition';
+import orderReducer from './order';
 import {
   CLOSE_MODAL,
   OPEN_INGREDIENT_MODAL,
@@ -55,21 +56,10 @@ const isModalOpenReducer = (state = initialIsModalOpen, action) => {
   }
 };
 
-// const activeBunReducer = (state = initialActiveBun, action) => {
-//   switch (action.type) {
-//     case SELECT_BUN: {
-//       return action.ingredient;
-//     }
-//     default: {
-//       return state;
-//     }
-//   }
-// };
-
 export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   composition: compositionReducer,
   selectedIngredient: selectedIngredientReducer,
   isModalOpen: isModalOpenReducer,
-  // activeBun: activeBunReducer,
+  order: orderReducer,
 });

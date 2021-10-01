@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -11,9 +11,10 @@ const modalRoot = document.getElementById('react-modals');
 
 function Modal({ children, header }) {
   const dispatch = useDispatch();
-  const onClose = () => {
+  const onClose = useCallback(() => {
     dispatch({ type: CLOSE_MODAL });
-  };
+  }, [dispatch]);
+
   useEffect(() => {
     const handleEscapeClose = (event) => {
       if (event.key === 'Escape') {
@@ -24,7 +25,7 @@ function Modal({ children, header }) {
     return () => {
       document.removeEventListener('keydown', handleEscapeClose);
     };
-  }, []);
+  }, [onClose]);
 
   return ReactDOM.createPortal(
     <ModalOverlay>

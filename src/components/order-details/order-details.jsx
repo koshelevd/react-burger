@@ -1,9 +1,9 @@
+import { useSelector } from 'react-redux';
 import styles from './order-details.module.css';
-import PropTypes from 'prop-types';
-import { DEFAULT_ORDER_ID } from '../../utils/data';
 import doneIcon from '../../assets/images/done.png';
 
-function OrderDetails({ orderId = DEFAULT_ORDER_ID }) {
+function OrderDetails() {
+  const orderId = useSelector((state) => state.order.info.number)
   return (
     <article className={`${styles.root}`}>
       <p className={`${styles.order} text text_type_digits-large mt-20 mb-8`}>
@@ -20,9 +20,5 @@ function OrderDetails({ orderId = DEFAULT_ORDER_ID }) {
     </article>
   );
 }
-
-OrderDetails.propTypes = {
-  orderId: PropTypes.number,
-};
 
 export default OrderDetails;

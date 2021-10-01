@@ -28,12 +28,6 @@
   border-radius: 6px;
 }
 
-.element {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .total {
   display: flex;
   flex-direction: row-reverse;

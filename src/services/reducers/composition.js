@@ -2,9 +2,14 @@ import {
   GET_COMPOSITION,
   ADD_COMPOSITION_ITEM,
   REMOVE_COMPOSITION_ITEM,
+  SELECT_ACTIVE_BUN,
+  SWAP_ITEMS,
 } from '../actions/composition';
 
-const initialState = [];
+const initialState = {
+  components: [],
+  activeBun: null,
+};
 
 const compositionReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -12,12 +17,36 @@ const compositionReducer = (state = initialState, action) => {
       return state;
     }
     case ADD_COMPOSITION_ITEM: {
-      return [...state, action.ingredient];
+      return {
+        ...state,
+        components: [...state.components, action.ingredient],
+      };
     }
     case REMOVE_COMPOSITION_ITEM: {
-      let result = state;
+      let result = state.components;
       result.splice(action.index, 1);
-      return result;
+      return {
+        ...state,
+        components: result,
+      };
+    }
+    case SELECT_ACTIVE_BUN: {
+      return {
+        ...state,
+        activeBun: action.ingredient,
+      };
+    }
+    case SWAP_ITEMS: {
+      const components = [...state.components];
+      components.splice(
+        action.hoverIndex,
+        0,
+        components.splice(action.dragIndex, 1)[0],
+      );
+      return {
+        ...state,
+        components: components,
+      };
     }
     default: {
       return state;

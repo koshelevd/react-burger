@@ -1,5 +1,6 @@
 import api from '../../utils/api';
 import { OPEN_ORDER_MODAL } from '.';
+import { CLEAR_COMPOSITION } from './composition';
 export const GET_CHECKOUT_REQUEST = 'GET_CHECKOUT_REQUEST';
 export const GET_CHECKOUT_SUCCESS = 'GET_CHECKOUT_SUCCESS';
 export const GET_CHECKOUT_FAILED = 'GET_CHECKOUT_FAILED';
@@ -15,6 +16,9 @@ export function checkout(data) {
         dispatch({
           type: GET_CHECKOUT_SUCCESS,
           info: res.order,
+        });
+        dispatch({
+          type: CLEAR_COMPOSITION,
         });
         dispatch({ type: OPEN_ORDER_MODAL });
       })

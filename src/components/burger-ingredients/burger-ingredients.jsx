@@ -1,7 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getIngredients } from '../../services/actions/ingredients';
-
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard from './ingredient-card/ingredient-card';
 import IngredientDetails from '../ingredient-details/ingredient-details';
@@ -20,10 +18,6 @@ const BurgerIngredients = React.memo(() => {
     types: state.ingredients.types,
     isModalOpen: state.isModalOpen.ingredient,
   }));
-
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
 
   function handleIngredientClick(ingredient) {
     dispatch({

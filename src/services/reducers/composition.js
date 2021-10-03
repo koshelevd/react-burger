@@ -4,6 +4,7 @@ import {
   REMOVE_COMPOSITION_ITEM,
   SELECT_ACTIVE_BUN,
   SWAP_ITEMS,
+  CLEAR_COMPOSITION,
 } from '../actions/composition';
 
 const initialState = {
@@ -15,6 +16,9 @@ const compositionReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_COMPOSITION: {
       return state;
+    }
+    case CLEAR_COMPOSITION: {
+      return initialState;
     }
     case ADD_COMPOSITION_ITEM: {
       return {

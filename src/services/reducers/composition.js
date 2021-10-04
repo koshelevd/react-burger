@@ -27,7 +27,7 @@ const compositionReducer = (state = initialState, action) => {
       };
     }
     case REMOVE_COMPOSITION_ITEM: {
-      let result = state.components;
+      const result = [...state.components];
       result.splice(action.index, 1);
       return {
         ...state,

@@ -34,21 +34,20 @@ const BurgerConstructor = React.memo(() => {
     ingredients: state.ingredients.all,
   }));
   const { components, activeBun } = useSelector((state) => state.composition);
-  const composition = useSelector((state) => state.composition);
   const isModalOpen = useSelector((state) => state.isModalOpen.order);
 
   const totalPrice = useMemo(
     () =>
-      composition.components.reduce(
+      components.reduce(
         (acc, val) => acc + val.price,
-        !!composition.activeBun ? composition.activeBun.price * 2 : 0,
+        !!activeBun ? activeBun.price * 2 : 0,
       ),
-    [composition],
+    [components, activeBun],
   );
 
   function handleCheckout() {
-    const compose = [activeBun, ...components, activeBun];
-    const data = compose.map((i) => i._id);
+    const composition = [activeBun, ...components, activeBun];
+    const data = composition.map((i) => i._id);
     dispatch(checkout({ ingredients: data }));
   }
 

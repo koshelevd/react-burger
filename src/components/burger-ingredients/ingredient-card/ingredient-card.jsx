@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Counter,
@@ -7,7 +8,7 @@ import { ingredientPropType } from '../../../utils/prop-schemas';
 import styles from './ingredient-card.module.css';
 import { useDrag } from 'react-dnd';
 
-function IngredientCard({ data }) {
+const IngredientCard = React.memo(({ data }) => {
   const { _id } = data;
   const [, dragRef] = useDrag({
     type: 'ingredient',
@@ -29,7 +30,7 @@ function IngredientCard({ data }) {
       </figcaption>
     </figure>
   );
-}
+});
 
 IngredientCard.propTypes = {
   data: ingredientPropType.isRequired,

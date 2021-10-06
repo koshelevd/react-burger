@@ -1,137 +1,111 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { v4 as uuid } from 'uuid';
+import React, { useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import DraggableConstructorElement from './draggable-constructor-element/draggable-constructor-element';
 import styles from './burger-constructor.module.css';
-import { IngredientsContext } from '../../contexts/ingredients-context';
-import api from '../../utils/api';
+import { ADD_INGREDIENT } from '../../services/actions/ingredients';
+import {
+  addCompositionItem,
+  SELECT_ACTIVE_BUN,
+} from '../../services/actions/composition';
+import { checkout } from '../../services/actions/order';
+import { useDrop } from 'react-dnd';
 
 const BurgerConstructor = React.memo(() => {
-  const [ingredients, setIngredients] = useContext(IngredientsContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [topBun, setTopBun] = useState(null);
-  const [bottomBun, setBottomBun] = useState(null);
-  const [orderId, setOrderId] = useState(0);
-
-  const composition = useMemo(() => {
-    const choosen = ingredients.filter(
-      (i) => i.type !== 'bun' && !!i.count && i.count > 0,
-    );
-    const result = [];
-    choosen.forEach((item) => {
-      for (let step = 0; step < item.count; step++) {
-        result.push({ ...item, _key: uuid() });
-      }
-    });
-    return result;
-  }, [ingredients]);
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: 'ingredient',
+    drop(item) {
+      handleDrop(item._id);
+    },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+  });
+  const outline = isHover ? '2px dashed lightgreen' : 'none';
+  const dispatch = useDispatch();
+  const { ingredients } = useSelector((state) => ({
+    ingredients: state.ingredients.all,
+  }));
+  const { components, activeBun } = useSelector((state) => state.composition);
+  const isModalOpen = useSelector((state) => state.isModalOpen.order);
 
   const totalPrice = useMemo(
     () =>
-      composition.reduce(
+      components.reduce(
         (acc, val) => acc + val.price,
-        !!topBun ? topBun.price * 2 : 0,
+        !!activeBun ? activeBun.price * 2 : 0,
       ),
-    [composition, topBun],
+    [components, activeBun],
   );
 
-  useEffect(() => {
-    const activeBun = ingredients.find(
-      (i) => i.type === 'bun' && i.count === 1,
-    );
-    if (!!activeBun) {
-      setTopBun({
-        ...activeBun,
-        name: activeBun.name + ' (верх)',
-      });
-      setBottomBun({
-        ...activeBun,
-        name: activeBun.name + ' (низ)',
-      });
-    }
-  }, [ingredients]);
-
-  function handleModalToggle() {
-    setIsModalOpen(!isModalOpen);
-  }
-
   function handleCheckout() {
+    const composition = [activeBun, ...components, activeBun];
     const data = composition.map((i) => i._id);
-    data.push(topBun._id);
-    data.push(bottomBun._id);
-    api
-      .checkout({ ingredients: data })
-      .then((res) => {
-        if (res.success) {
-          setOrderId(res.order.number);
-          handleModalToggle();
-        }
-      })
-      .catch((err) => console.log(err));
+    dispatch(checkout({ ingredients: data }));
   }
 
-  function deleteIngredient(ingredient) {
-    if (ingredient.type !== 'bun') {
-      setIngredients((prevState) =>
-        prevState.map((i) => {
-          if (i._id === ingredient._id && !!i.count) {
-            return { ...i, count: i.count - 1 };
-          }
-          return i;
-        }),
-      );
-    }
+  function handleDrop(itemId) {
+    const ingredient = ingredients.find((i) => i._id === itemId);
+    dispatch({
+      type: ADD_INGREDIENT,
+      ingredient,
+    });
+
+    if (ingredient.type !== 'bun') dispatch(addCompositionItem(ingredient));
+    else
+      dispatch({
+        type: SELECT_ACTIVE_BUN,
+        ingredient,
+      });
   }
 
   const modal = (
-    <Modal onClose={handleModalToggle}>
-      <OrderDetails orderId={orderId} />
+    <Modal>
+      <OrderDetails />
     </Modal>
   );
 
   return (
     <section className={styles.section}>
-      <div className="mt-25 mb-10 ml-4">
+      <div className="mt-25 mb-10 ml-4" ref={dropTarget} style={{ outline }}>
         <span className="pl-8">
-          {topBun ? (
+          {activeBun ? (
             <ConstructorElement
               type="top"
               isLocked={true}
-              text={topBun.name}
-              price={topBun.price}
-              thumbnail={topBun.image}
+              text={`${activeBun.name} (верх)`}
+              price={activeBun.price}
+              thumbnail={activeBun.image}
             />
           ) : (
             <span>Выберите булку</span>
           )}
         </span>
         <ul className={`${styles.scrollArea} mt-4 mb-4`}>
-          {composition.map((item) => (
-            <li key={item._key} className={`mb-4 ${styles.element}`}>
-              <DragIcon type="primary" />
-              <ConstructorElement
-                text={item.name}
-                price={item.price}
-                thumbnail={item.image}
-                handleClose={() => deleteIngredient(item)}
-              />
-            </li>
+          {components.map((item, index) => (
+            <DraggableConstructorElement
+              item={item}
+              index={index}
+              key={item.uuid}
+              id={item.uuid}
+            />
           ))}
         </ul>
         <span className="pl-8">
-          {bottomBun ? (
+          {activeBun ? (
             <ConstructorElement
               type="bottom"
               isLocked={true}
-              text={bottomBun.name}
-              price={bottomBun.price}
-              thumbnail={bottomBun.image}
+              text={`${activeBun.name} (низ)`}
+              price={activeBun.price}
+              thumbnail={activeBun.image}
             />
           ) : (
             <span>Выберите булку</span>
@@ -139,7 +113,7 @@ const BurgerConstructor = React.memo(() => {
         </span>
       </div>
       <div className={`${styles.total} mr-5`}>
-        {!!topBun && composition.length > 0 && (
+        {!!activeBun && components.length > 0 && (
           <Button type="primary" size="large" onClick={handleCheckout}>
             Оформить заказ
           </Button>

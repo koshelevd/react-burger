@@ -1,7 +1,13 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { UNSET_SELECTED_INGREDIENT } from '../../services/actions';
 import styles from './ingredient-details.module.css';
-import { ingredientPropType } from '../../utils/prop-schemas';
 
-function IngredientDetails({ data }) {
+function IngredientDetails() {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.selectedIngredient);
+  useEffect(() => () => dispatch({ type: UNSET_SELECTED_INGREDIENT }), [data, dispatch]);
+
   return (
     <figure className={styles.root}>
       <img src={data.image_large} alt={data.name} className={styles.picture} />
@@ -31,9 +37,5 @@ function IngredientDetails({ data }) {
     </figure>
   );
 }
-
-IngredientDetails.propTypes = {
-  data: ingredientPropType,
-};
 
 export default IngredientDetails;

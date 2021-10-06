@@ -3,12 +3,19 @@ import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './ingredient-card.module.css';
 import { ingredientPropType } from '../../../utils/prop-schemas';
+import styles from './ingredient-card.module.css';
+import { useDrag } from 'react-dnd';
 
 function IngredientCard({ data }) {
+  const { _id } = data;
+  const [, dragRef] = useDrag({
+    type: 'ingredient',
+    item: { _id },
+  });
+
   return (
-    <figure className={styles.figure}>
+    <figure className={styles.figure} ref={dragRef}>
       <img src={data.image} alt={data.name} className={styles.picture} />
       {!!data.count && <Counter count={data.count} size="default" />}
       <p className={`${styles.price} mt-2 mb-2`}>

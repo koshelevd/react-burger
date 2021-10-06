@@ -1,10 +1,13 @@
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import styles from './modal-overlay.module.css';
+import { CLOSE_MODAL } from '../../../services/actions';
 
-function ModalOverlay({ onClose, children }) {
+function ModalOverlay({ children }) {
+  const dispatch = useDispatch();
   function handleClose(e) {
     if (e.target === e.currentTarget) {
-      onClose();
+      dispatch({ type: CLOSE_MODAL });
     }
   }
 
@@ -16,7 +19,6 @@ function ModalOverlay({ onClose, children }) {
 }
 
 ModalOverlay.propTypes = {
-  onClose: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
 };
 

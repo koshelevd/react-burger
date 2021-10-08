@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { UNSET_SELECTED_INGREDIENT } from '../../services/actions';
+import { unsetSelectedIngredient } from '../../services/slices/select-ingredient-slice';
 import styles from './ingredient-details.module.css';
 
 function IngredientDetails() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.selectedIngredient);
-  useEffect(() => () => dispatch({ type: UNSET_SELECTED_INGREDIENT }), [data, dispatch]);
+  useEffect(() => () => dispatch(unsetSelectedIngredient()), [data, dispatch]);
 
   return (
     <figure className={styles.root}>

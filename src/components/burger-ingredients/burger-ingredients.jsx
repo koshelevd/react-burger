@@ -5,11 +5,8 @@ import IngredientCard from './ingredient-card/ingredient-card';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import styles from './burger-ingredients.module.css';
-import {
-  OPEN_INGREDIENT_MODAL,
-  SET_SELECTED_INGREDIENT,
-} from '../../services/actions';
 import { useTopType } from '../../hooks/useTopType';
+import { setSelectedIngredient } from '../../services/slices/select-ingredient-slice';
 
 const BurgerIngredients = React.memo(() => {
   const dispatch = useDispatch();
@@ -20,12 +17,7 @@ const BurgerIngredients = React.memo(() => {
   }));
 
   function handleIngredientClick(ingredient) {
-    dispatch({
-      type: SET_SELECTED_INGREDIENT,
-      ingredient,
-    });
-
-    dispatch({ type: OPEN_INGREDIENT_MODAL });
+    dispatch(setSelectedIngredient(ingredient));
   }
 
   const modal = (

@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from './modal-overlay/modal-overlay';
 import styles from './modal.module.css';
-import { CLOSE_MODAL } from '../../services/actions';
+import { closeModals } from '../../services/slices/modal-slice';
 
 const modalRoot = document.getElementById('react-modals');
 
 function Modal({ children, header }) {
   const dispatch = useDispatch();
   const onClose = useCallback(() => {
-    dispatch({ type: CLOSE_MODAL });
+    dispatch(closeModals());
   }, [dispatch]);
 
   useEffect(() => {

@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import {
   Button,
   ConstructorElement,
@@ -10,12 +9,11 @@ import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import DraggableConstructorElement from './draggable-constructor-element/draggable-constructor-element';
 import styles from './burger-constructor.module.css';
-import { ADD_INGREDIENT } from '../../services/actions/ingredients';
 import {
   addCompositionItem,
-  SELECT_ACTIVE_BUN,
-} from '../../services/actions/composition';
-import { checkout } from '../../services/actions/order';
+  selectActiveBun,
+} from '../../services/slices/composition-slice';
+import { checkout } from '../../services/slices/order-slice';
 import { useDrop } from 'react-dnd';
 
 const BurgerConstructor = React.memo(() => {
@@ -53,17 +51,8 @@ const BurgerConstructor = React.memo(() => {
 
   function handleDrop(itemId) {
     const ingredient = ingredients.find((i) => i._id === itemId);
-    dispatch({
-      type: ADD_INGREDIENT,
-      ingredient,
-    });
-
     if (ingredient.type !== 'bun') dispatch(addCompositionItem(ingredient));
-    else
-      dispatch({
-        type: SELECT_ACTIVE_BUN,
-        ingredient,
-      });
+    else dispatch(selectActiveBun(ingredient));
   }
 
   const modal = (

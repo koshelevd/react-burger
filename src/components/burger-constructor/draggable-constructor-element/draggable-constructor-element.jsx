@@ -7,25 +7,23 @@ import {
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './draggable-constructor-element.module.css';
-import { REMOVE_INGREDIENT } from '../../../services/actions/ingredients';
 import {
-  REMOVE_COMPOSITION_ITEM,
-  SWAP_ITEMS,
-} from '../../../services/actions/composition';
+  removeCompositionItem,
+  swapItems,
+} from '../../../services/slices/composition-slice';
 
 const DraggableConstructorElement = React.memo(({ item, id, index }) => {
   const dispatch = useDispatch();
 
   const ref = useRef(null);
 
-  const swapItems = useCallback((dragIndex, hoverIndex) => {
-    dispatch({
-      type: SWAP_ITEMS,
-      dragIndex,
-      hoverIndex,
-    });
-  }, [dispatch]);
-  
+  const swapIngredients = useCallback(
+    (dragIndex, hoverIndex) => {
+      dispatch(swapItems({ dragIndex, hoverIndex }));
+    },
+    [dispatch],
+  );
+
   const [{ handlerId }, drop] = useDrop({
     accept: 'element',
     collect(monitor) {
@@ -53,7 +51,7 @@ const DraggableConstructorElement = React.memo(({ item, id, index }) => {
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return;
       }
-      swapItems(dragIndex, hoverIndex);
+      swapIngredients(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
   });
@@ -67,14 +65,7 @@ const DraggableConstructorElement = React.memo(({ item, id, index }) => {
   drag(drop(ref));
 
   function deleteIngredient(ingredient, index) {
-    dispatch({
-      type: REMOVE_INGREDIENT,
-      ingredient,
-    });
-    dispatch({
-      type: REMOVE_COMPOSITION_ITEM,
-      index,
-    });
+    dispatch(removeCompositionItem({ index, ingredient }));
   }
 
   return (

@@ -1,30 +1,21 @@
-/* eslint-disable */
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { Routes, Route } from 'react-router-dom';
 import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients.jsx';
-import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
-import styles from './app.module.css';
-import { fetchIngredients } from '../../services/slices/ingredients-slice';
+
+import MainPage from '../../pages/main-page/main-page';
+import LoginPage from '../../pages/login-page/login-page';
+import RegisterPage from '../../pages/register-page/register-page';
+import NotFoundPage from '../../pages/not-found-page/not-found-page';
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
-
   return (
     <>
       <AppHeader />
-      <main className={`${styles.main} pl-5 pr-5`}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </DndProvider>
-      </main>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </>
   );
 }

@@ -1,10 +1,15 @@
 import { Routes, Route } from 'react-router-dom';
 import AppHeader from '../app-header/app-header';
-
-import MainPage from '../../pages/main-page/main-page';
-import LoginPage from '../../pages/login-page/login-page';
-import RegisterPage from '../../pages/register-page/register-page';
-import NotFoundPage from '../../pages/not-found-page/not-found-page';
+import {
+  ForgotPasswordPage,
+  LoginPage,
+  MainPage,
+  NotFoundPage,
+  RegisterPage,
+  ProfilePage,
+  ResetPasswordPage,
+  IngredientPage,
+} from '../../pages';
 
 function App() {
   return (
@@ -14,6 +19,10 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/ingredients" element={<IngredientPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>

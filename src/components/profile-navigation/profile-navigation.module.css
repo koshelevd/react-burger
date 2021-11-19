@@ -1,0 +1,15 @@
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  text-decoration: none;
+  display: block;
+  line-height: 64px;
+}
+
+.link:hover, .active {
+  color: var(--text-primary-color);
+}

@@ -1,3 +1,8 @@
+.link {
+  display: block;
+  text-decoration: none;
+}
+
 .figure {
   width: 272px;
   height: 208px;
@@ -7,11 +12,6 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-}
-
-.picture {
-  /*width: 240px;*/
-  /*height: 120px;*/
 }
 
 .price {

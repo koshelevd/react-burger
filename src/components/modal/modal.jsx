@@ -1,5 +1,6 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -9,11 +10,13 @@ import { closeModals } from '../../services/slices/modal-slice';
 
 const modalRoot = document.getElementById('react-modals');
 
-function Modal({ children, header }) {
+function Modal({ children, header, closeHandler }) {
   const dispatch = useDispatch();
-  const onClose = useCallback(() => {
+  const popupClose = useCallback(() => {
     dispatch(closeModals());
   }, [dispatch]);
+
+  const onClose = closeHandler ?? popupClose;
 
   useEffect(() => {
     const handleEscapeClose = (event) => {

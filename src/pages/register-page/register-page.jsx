@@ -1,41 +1,84 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, Navigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  EmailInput,
   Input,
   PasswordInput,
-  Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './register-page.module.css';
+import { AuthForm } from '../../components';
+import authSlice, { signUp } from '../../services/slices/auth-slice';
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 
 function RegisterPage() {
-  return (
-    <main className={`${styles.main}`}>
-      <h1 className={`${styles.heading} text text_type_main-medium pb-6`}>
-        Регистрация
-      </h1>
-      <form className={`${styles.form} mb-20`}>
-        <div className="mb-6">
-          <Input placeholder="Имя" />
-        </div>
-        <div className="mb-6">
-          <EmailInput />
-        </div>
-        <div className="mb-6">
-          <PasswordInput />
-        </div>
-        <Button>Зарегистрироваться</Button>
-      </form>
+  const dispatch = useDispatch();
+  let location = useLocation();
+  const { clearError } = authSlice.actions;
+  const { isLoggedIn, error } = useSelector((store) => store.auth);
+  const { values, handleChange, errors, isValid } = useFormWithValidation();
 
-      <p
-        className={`${styles.info} text text_type_main-default text_color_inactive mb-4`}
-      >
-        Уже зарегистрированы?{' '}
-        <Link to="/login" className="link">
-          Войти
-        </Link>
-      </p>
-    </main>
+  const formInfo = [
+    {
+      text: 'Уже зарегистрированы?',
+      linkTitle: 'Войти',
+      linkUrl: '/login',
+    },
+  ];
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch, clearError]);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    dispatch(signUp(values));
+  }
+
+  if (isLoggedIn) return <Navigate to="/" state={{ from: location }} />;
+
+  return (
+    <AuthForm
+      header="Регистрация"
+      buttonText="Зарегистрироваться"
+      formInfo={formInfo}
+      onSubmit={handleSubmit}
+      isValid={isValid}
+      error={error}
+    >
+      <div className="mb-6">
+        <Input
+          type="name"
+          placeholder="Имя"
+          value={values.name}
+          name="name"
+          error={!!errors.name}
+          errorText={errors.name}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="mb-6">
+        <Input
+          type="email"
+          placeholder="E-mail"
+          value={values.email}
+          name="email"
+          error={!!errors.email}
+          errorText={errors.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="mb-6">
+        <PasswordInput
+          placeholder="Пароль"
+          value={values.password}
+          name="password"
+          error={!!errors.password}
+          errorText={errors.password}
+          onChange={handleChange}
+        />
+      </div>
+    </AuthForm>
   );
 }
 export default RegisterPage;

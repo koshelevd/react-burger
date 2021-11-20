@@ -14,7 +14,11 @@ function RegisterPage() {
   let location = useLocation();
   const { clearError } = authSlice.actions;
   const { isLoggedIn, error } = useSelector((store) => store.auth);
-  const { values, handleChange, errors, isValid } = useFormWithValidation();
+  const { values, handleChange, errors, isValid } = useFormWithValidation({
+    name: '',
+    email: '',
+    password: '',
+  });
 
   const formInfo = [
     {
@@ -46,7 +50,7 @@ function RegisterPage() {
     >
       <div className="mb-6">
         <Input
-          type="name"
+          type="text"
           placeholder="Имя"
           value={values.name}
           name="name"

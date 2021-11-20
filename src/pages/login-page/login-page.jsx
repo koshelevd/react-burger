@@ -14,7 +14,10 @@ function LoginPage() {
   let location = useLocation();
   const { clearError } = authSlice.actions;
   const { isLoggedIn, error } = useSelector((store) => store.auth);
-  const { values, handleChange, errors, isValid } = useFormWithValidation();
+  const { values, handleChange, errors, isValid } = useFormWithValidation({
+    email: '',
+    password: '',
+  });
   const formInfo = [
     {
       text: 'Вы — новый пользователь?',

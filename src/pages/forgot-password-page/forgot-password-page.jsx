@@ -8,9 +8,13 @@ import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 function ForgotPasswordPage() {
   const dispatch = useDispatch();
   let location = useLocation();
-  const { isRequestSucceded, error } = useSelector((store) => store.forgotPassword);
+  const { isRequestSucceded, error } = useSelector(
+    (store) => store.forgotPassword,
+  );
   const { isLoggedIn } = useSelector((store) => store.auth);
-  const { values, handleChange, errors, isValid } = useFormWithValidation();
+  const { values, handleChange, errors, isValid } = useFormWithValidation({
+    email: '',
+  });
 
   const formInfo = [
     {
@@ -22,11 +26,12 @@ function ForgotPasswordPage() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch(forgotPassword({email: values.email}));
+    dispatch(forgotPassword({ email: values.email }));
   }
 
   if (isLoggedIn) return <Navigate to="/login" state={{ from: location }} />;
-  if (isRequestSucceded) return <Navigate to="/reset-password" state={{ from: location }} />;
+  if (isRequestSucceded)
+    return <Navigate to="/reset-password" state={{ from: location }} />;
 
   return (
     <AuthForm

@@ -16,7 +16,10 @@ function ResetPasswordPage() {
     (store) => store.resetPassword,
   );
   const { isLoggedIn } = useSelector((store) => store.auth);
-  const { values, handleChange, errors, isValid } = useFormWithValidation();
+  const { values, handleChange, errors, isValid } = useFormWithValidation({
+    password: '',
+    token: '',
+  });
   const isFulfilled = localStorage.getItem(FULFILLED_FORGOT_REQUEST_KEY);
 
   const formInfo = [

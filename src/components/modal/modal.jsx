@@ -31,7 +31,7 @@ function Modal({ children, header, closeHandler }) {
   }, [onClose]);
 
   return ReactDOM.createPortal(
-    <ModalOverlay>
+    <ModalOverlay closeHandler={closeHandler}>
       <div className={`${styles.root} pt-10 pr-10 pb-10 pl-10`}>
         {header && (
           <h2 className={`text text_type_main-large ${styles.header}`}>

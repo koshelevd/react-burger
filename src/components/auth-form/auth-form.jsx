@@ -25,8 +25,9 @@ function AuthForm({
       </form>
 
       {formInfo &&
-        formInfo.map((data) => (
+        formInfo.map((data, idx) => (
           <p
+            key={idx}
             className={`${styles.info} text text_type_main-default text_color_inactive mb-4`}
           >
             {data.text}{' '}

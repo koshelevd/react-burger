@@ -1,4 +1,4 @@
-import { NavLink, useMatch } from 'react-router-dom';
+import { NavLink, useMatch, Link } from 'react-router-dom';
 import {
   BurgerIcon,
   Logo,
@@ -51,9 +51,9 @@ function AppHeader() {
             </NavLink>
           </li>
         </ul>
-        <span className={styles.logo}>
+        <Link className={styles.logo} to="/">
           <Logo />
-        </span>
+        </Link>
         <ul className={`${styles.menu} ${styles.menu_right}`}>
           <li className={`${styles.item} pl-5 pr-5 mr-2`}>
             <NavLink

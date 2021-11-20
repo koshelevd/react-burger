@@ -80,7 +80,8 @@ const setLoggedIn = (state, { payload }) => {
 const setLoggedOut = (state) => {
   deleteCookie(ACCESS_TOKEN_COOKIE_NAME);
   deleteCookie(REFRESH_TOKEN_COOKIE_NAME);
-  state = initialState;
+  state.isLoggedIn = false;
+  state.user = null;
 };
 
 const authSlice = createSlice({

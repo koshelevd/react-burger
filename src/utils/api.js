@@ -43,11 +43,9 @@ class Api {
 
   _retriableFetch = async (url, options = {}) => {
     try {
-      console.log({ options });
       const res = await fetch(url, options);
       return await this._processResponse(res);
     } catch (err) {
-      console.log(err);
       if (err.message === 'jwt expired') {
         const refreshData = await this.refreshToken();
         setCookie(REFRESH_TOKEN_COOKIE_NAME, refreshData.refreshToken);
@@ -96,8 +94,18 @@ class Api {
     }).then(this._processResponse);
   }
 
-  // Process checkout: post ingredients.
-  checkout = (data) => this._postRequest(this.checkoutUrl, data);
+  checkout(data) {
+    // Process checkout: post ingredients.
+    const token = getCookie(ACCESS_TOKEN_COOKIE_NAME);
+    return this._retriableFetch(this.checkoutUrl, {
+      method: 'POST',
+      headers: {
+        ...this.headers,
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+  }
 
   // Post data to obtain verification token for pass reset.
   forgotPassword = (data) => this._postRequest(this.forgotPasswordUrl, data);

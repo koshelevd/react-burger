@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  // PasswordInput,
   Input,
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -12,14 +11,17 @@ import styles from './profile-page.module.css';
 function ProfilePage() {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
-  const { values, handleChange, errors, resetForm } = useFormWithValidation();
+  const { values, handleChange, errors, resetForm } = useFormWithValidation({
+    name: '',
+    email: '',
+    password: '',
+  });
 
   const [isEditName, setIsEditName] = useState(false);
   const [isEditEmail, setIsEditEmail] = useState(false);
   const [isEditPassword, setIsEditPassword] = useState(false);
 
   function onEditEnd() {
-    // resetForm(user);
     setIsEditName(false);
     setIsEditEmail(false);
     setIsEditPassword(false);
@@ -40,9 +42,10 @@ function ProfilePage() {
     if (!user) {
       dispatch(getProfile());
     } else {
-      resetForm(user);
+      resetForm({ ...user, password: '' });
     }
-  }, [user, dispatch, resetForm]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, dispatch]);
 
   return (
     <form className={styles.form}>

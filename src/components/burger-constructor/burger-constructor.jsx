@@ -87,7 +87,6 @@ const BurgerConstructor = React.memo(() => {
               item={item}
               index={index}
               key={item.uuid}
-              id={item.uuid}
             />
           ))}
         </ul>

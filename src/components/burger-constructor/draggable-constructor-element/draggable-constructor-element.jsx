@@ -11,8 +11,11 @@ import {
   removeCompositionItem,
   swapItems,
 } from '../../../services/slices/composition-slice';
+import PropTypes from 'prop-types';
+import { ingredientItemPropType } from '../../../utils/prop-schemas';
 
-const DraggableConstructorElement = React.memo(({ item, id, index }) => {
+const DraggableConstructorElement = React.memo(({ item, index }) => {
+  const id = item.id;
   const dispatch = useDispatch();
 
   const ref = useRef(null);
@@ -84,5 +87,10 @@ const DraggableConstructorElement = React.memo(({ item, id, index }) => {
     </li>
   );
 });
+
+DraggableConstructorElement.propTypes = {
+  item: ingredientItemPropType.isRequired,
+  index: PropTypes.number.isRequired,
+};
 
 export default DraggableConstructorElement;

@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchIngredients } from '../../services/slices/ingredients-slice';
 import styles from './ingredient-details.module.css';
 
 function IngredientDetails() {
-  let { id } = useParams();
+  const { id } = useParams();
   const dispatch = useDispatch();
   const ingredients = useSelector((state) => state.ingredients.all);
   const [data, setData] = useState({});
@@ -14,9 +13,6 @@ function IngredientDetails() {
 
   useEffect(() => {
     const selectedIngredient = ingredients.find((i) => i._id === id);
-    if (ingredients.length === 0) {
-      dispatch(fetchIngredients());
-    }
     if (Object.keys(data).length === 0 && selectedIngredient) {
       setData(selectedIngredient);
     }

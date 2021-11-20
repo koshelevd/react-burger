@@ -27,7 +27,7 @@ function addIngredient(state, action) {
   if (ingredient.type === 'bun') {
     result = state.all.map((i) => {
       if (i._id === ingredient._id) {
-        return { ...i, count: 1 };
+        return { ...i, count: 2 };
       } else if (i.type === 'bun') {
         return { ...i, count: 0 };
       }

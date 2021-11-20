@@ -8,3 +8,4 @@ export { default as AuthForm } from './auth-form/auth-form';
 export { default as ProfileNavigation } from './profile-navigation/profile-navigation';
 export { default as RequireAuth } from './require-auth/require-auth';
 export { default as Layout } from './layout/layout';
+export { default as ProfileLayout } from './profile-layout/profile-layout';

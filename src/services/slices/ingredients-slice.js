@@ -18,11 +18,7 @@ const initialState = {
 
 export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
-  () =>
-    api
-      .getIngredients()
-      .then((res) => res.data)
-      .catch((err) => err),
+  () => api.getIngredients().then((res) => res.data),
 );
 
 function addIngredient(state, action) {

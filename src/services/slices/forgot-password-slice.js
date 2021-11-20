@@ -10,10 +10,7 @@ const initialState = {
 };
 
 export const forgotPassword = createAsyncThunk('forgotPassword', (data) =>
-  api
-    .forgotPassword(data)
-    .then((res) => res)
-    .catch((err) => err),
+  api.forgotPassword(data).then((res) => res),
 );
 
 const forgotPasswordSlice = createSlice({

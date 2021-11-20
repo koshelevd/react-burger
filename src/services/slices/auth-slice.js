@@ -29,38 +29,23 @@ const initialState = {
 };
 
 export const signUp = createAsyncThunk('signUp', (data) =>
-  api
-    .signUp(data)
-    .then((res) => res)
-    .catch((err) => err),
+  api.signUp(data).then((res) => res),
 );
 
 export const signIn = createAsyncThunk('signIn', (data) =>
-  api
-    .signIn(data)
-    .then((res) => res)
-    .catch((err) => err),
+  api.signIn(data).then((res) => res),
 );
 
 export const signOut = createAsyncThunk('signOut', (data) =>
-  api
-    .signOut(data)
-    .then((res) => res)
-    .catch((err) => err),
+  api.signOut(data).then((res) => res),
 );
 
 export const getProfile = createAsyncThunk('getProfile', () =>
-  api
-    .getUserInfo()
-    .then((res) => res)
-    .catch((err) => err),
+  api.getUserInfo().then((res) => res),
 );
 
 export const patchProfile = createAsyncThunk('patchProfile', (data) =>
-  api
-    .patchUserInfo(data)
-    .then((res) => res)
-    .catch((err) => err),
+  api.patchUserInfo(data).then((res) => res),
 );
 
 const setLoggedIn = (state, { payload }) => {

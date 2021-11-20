@@ -39,7 +39,7 @@ function App() {
             }
           >
             <Route index element={<ProfilePage />} />
-            <Route path="orders" element={<>To develop</>} />
+            <Route path="orders" element={<></>} />
           </Route>
           <Route path="/ingredients/:id" element={<IngredientDetails />} />
           <Route path="*" element={<NotFoundPage />} />

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
@@ -28,10 +29,12 @@ const BurgerConstructor = React.memo(() => {
   });
   const outline = isHover ? '2px dashed lightgreen' : 'none';
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { ingredients } = useSelector((state) => ({
     ingredients: state.ingredients.all,
   }));
   const { components, activeBun } = useSelector((state) => state.composition);
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const isModalOpen = useSelector((state) => state.isModalOpen.order);
 
   const totalPrice = useMemo(
@@ -44,6 +47,7 @@ const BurgerConstructor = React.memo(() => {
   );
 
   function handleCheckout() {
+    if (!isLoggedIn) return navigate('/login');
     const composition = [activeBun, ...components, activeBun];
     const data = composition.map((i) => i._id);
     dispatch(checkout({ ingredients: data }));

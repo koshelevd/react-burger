@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import {
   Counter,
   CurrencyIcon,
@@ -45,7 +44,6 @@ const IngredientCard = React.memo(({ data }) => {
 
 IngredientCard.propTypes = {
   data: ingredientPropType.isRequired,
-  quantity: PropTypes.number,
 };
 
 export default IngredientCard;

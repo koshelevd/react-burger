@@ -50,20 +50,12 @@ function AppHeader() {
               <span className={styles.text}>Лента заказов</span>
             </NavLink>
           </li>
-          {/* <li className={`${styles.item} pl-5 pr-5`}>
-            <span className="mr-2">
-              <ListIcon type="secondary" />
-            </span>
-            <span className="text text_type_main-default text_color_inactive">
-              Лента заказов
-            </span>
-          </li> */}
         </ul>
         <span className={styles.logo}>
           <Logo />
         </span>
         <ul className={`${styles.menu} ${styles.menu_right}`}>
-        <li className={`${styles.item} pl-5 pr-5 mr-2`}>
+          <li className={`${styles.item} pl-5 pr-5 mr-2`}>
             <NavLink
               to="/profile"
               className={({ isActive }) =>
@@ -80,14 +72,6 @@ function AppHeader() {
               <span className={styles.text}>Личный кабинет</span>
             </NavLink>
           </li>
-          {/* <li className={`${styles.item} pl-5 pr-5`}>
-            <span className="mr-2">
-              <ProfileIcon type="secondary" />
-            </span>
-            <span className="text text_type_main-default text_color_inactive">
-              Личный кабинет
-            </span>
-          </li> */}
         </ul>
       </nav>
     </header>

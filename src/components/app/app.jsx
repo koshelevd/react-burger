@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { Layout, IngredientDetails, Modal } from '../.';
+import { Layout, IngredientDetails, Modal, ProfileLayout } from '../.';
 import {
   ForgotPasswordPage,
   LoginPage,
@@ -34,10 +34,11 @@ function App() {
             path="profile"
             element={
               <RequireAuth>
-                <ProfilePage />
+                <ProfileLayout />
               </RequireAuth>
             }
           >
+            <Route index element={<ProfilePage />} />
             <Route path="orders" element={<>To develop</>} />
           </Route>
           <Route path="/ingredients/:id" element={<IngredientDetails />} />
@@ -49,7 +50,10 @@ function App() {
           <Route
             path="/ingredients/:id"
             element={
-              <Modal header="Детали ингредиента" closeHandler={handleModalClose}>
+              <Modal
+                header="Детали ингредиента"
+                closeHandler={handleModalClose}
+              >
                 <IngredientDetails />
               </Modal>
             }

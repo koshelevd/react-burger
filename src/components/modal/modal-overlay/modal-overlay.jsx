@@ -7,13 +7,12 @@ function ModalOverlay({ children, closeHandler }) {
   const dispatch = useDispatch();
   function handleClose(e) {
     if (e.target === e.currentTarget) {
-      dispatch(closeModals());
+      !!closeHandler ? closeHandler() : dispatch(closeModals());
     }
   }
-  const onClose = closeHandler ?? handleClose;
 
   return (
-    <section className={styles.root} onClick={onClose}>
+    <section className={styles.root} onClick={handleClose}>
       {children}
     </section>
   );

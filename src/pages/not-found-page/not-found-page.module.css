@@ -1,0 +1,9 @@
+.main {
+  max-width: 480px;
+  width: 100%;
+  margin: 180px auto;
+}
+
+.heading {
+  text-align: center;
+}

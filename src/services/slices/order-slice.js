@@ -9,10 +9,7 @@ const initialState = {
 };
 
 export const checkout = createAsyncThunk('order/checkout', (data) =>
-  api
-    .checkout(data)
-    .then((res) => res.order)
-    .catch((err) => err),
+  api.checkout(data).then((res) => res.order),
 );
 
 const orderSlice = createSlice({

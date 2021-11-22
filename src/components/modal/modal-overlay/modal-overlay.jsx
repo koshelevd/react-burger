@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import styles from './modal-overlay.module.css';
 import { closeModals } from '../../../services/slices/modal-slice';
 
-function ModalOverlay({ children }) {
+function ModalOverlay({ children, closeHandler }) {
   const dispatch = useDispatch();
   function handleClose(e) {
     if (e.target === e.currentTarget) {
-      dispatch(closeModals());
+      !!closeHandler ? closeHandler() : dispatch(closeModals());
     }
   }
 
@@ -20,6 +20,7 @@ function ModalOverlay({ children }) {
 
 ModalOverlay.propTypes = {
   children: PropTypes.element.isRequired,
+  closeHandler: PropTypes.func,
 };
 
 export default ModalOverlay;

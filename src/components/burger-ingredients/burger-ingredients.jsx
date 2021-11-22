@@ -1,30 +1,15 @@
 import React, { useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard from './ingredient-card/ingredient-card';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import Modal from '../modal/modal';
 import styles from './burger-ingredients.module.css';
 import { useTopType } from '../../hooks/useTopType';
-import { setSelectedIngredient } from '../../services/slices/select-ingredient-slice';
 
 const BurgerIngredients = React.memo(() => {
-  const dispatch = useDispatch();
-  const { ingredients, types, isModalOpen } = useSelector((state) => ({
+  const { ingredients, types } = useSelector((state) => ({
     ingredients: state.ingredients.all,
     types: state.ingredients.types,
-    isModalOpen: state.isModalOpen.ingredient,
   }));
-
-  function handleIngredientClick(ingredient) {
-    dispatch(setSelectedIngredient(ingredient));
-  }
-
-  const modal = (
-    <Modal header="Детали ингредиента">
-      <IngredientDetails />
-    </Modal>
-  );
 
   const bunRef = useRef();
   const sauceRef = useRef();
@@ -38,7 +23,6 @@ const BurgerIngredients = React.memo(() => {
   return (
     <section className={styles.section}>
       <h2 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h2>
-
       <div className={styles.tabs}>
         {types.map((type) => {
           const ref =
@@ -85,7 +69,7 @@ const BurgerIngredients = React.memo(() => {
                 {ingredients
                   .filter((i) => i.type === type.slug)
                   .map((i) => (
-                    <li key={i._id} onClick={() => handleIngredientClick(i)}>
+                    <li key={i._id}>
                       <IngredientCard data={i} />
                     </li>
                   ))}
@@ -94,7 +78,6 @@ const BurgerIngredients = React.memo(() => {
           );
         })}
       </div>
-      {isModalOpen && modal}
     </section>
   );
 });

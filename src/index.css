@@ -9,3 +9,7 @@ body {
   color: #fff;
   box-sizing: border-box;
 }
+
+.link {
+  color: var(--colors-interface-accent);
+}

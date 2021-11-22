@@ -1,16 +1,28 @@
-/* eslint-disable */
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients.jsx';
-import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
-import styles from './app.module.css';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Layout, IngredientDetails, Modal, ProfileLayout } from '../.';
+import {
+  ForgotPasswordPage,
+  LoginPage,
+  MainPage,
+  NotFoundPage,
+  RegisterPage,
+  ProfilePage,
+  ResetPasswordPage,
+} from '../../pages';
+import { RequireAuth } from '../.';
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
 
 function App() {
+  const location = useLocation();
   const dispatch = useDispatch();
+  const backgroundLocation = location.state?.backgroundLocation;
+  const navigate = useNavigate();
+
+  const handleModalClose = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
 
   useEffect(() => {
     dispatch(fetchIngredients());
@@ -18,13 +30,43 @@ function App() {
 
   return (
     <>
-      <AppHeader />
-      <main className={`${styles.main} pl-5 pr-5`}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </DndProvider>
-      </main>
+      <Routes location={backgroundLocation || location}>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<MainPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="reset-password" element={<ResetPasswordPage />} />
+          <Route
+            path="profile"
+            element={
+              <RequireAuth>
+                <ProfileLayout />
+              </RequireAuth>
+            }
+          >
+            <Route index element={<ProfilePage />} />
+            <Route path="orders" element={<></>} />
+          </Route>
+          <Route path="/ingredients/:id" element={<IngredientDetails />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+      {backgroundLocation && (
+        <Routes>
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal
+                header="Детали ингредиента"
+                closeHandler={handleModalClose}
+              >
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </>
   );
 }

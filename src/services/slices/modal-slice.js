@@ -1,18 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { setSelectedIngredient } from './select-ingredient-slice';
 import { checkout } from './order-slice';
 
 const initialState = {
-  ingredient: false,
   order: false,
 };
-
-function showIngredientModal() {
-  return {
-    ...initialState,
-    ingredient: true,
-  };
-}
 
 function showOrderModal() {
   return {
@@ -29,14 +20,11 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    openIngredient: showIngredientModal,
     openOrder: showOrderModal,
     closeModals: hideModals,
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(setSelectedIngredient, showIngredientModal)
-      .addCase(checkout.fulfilled, showOrderModal);
+    builder.addCase(checkout.fulfilled, showOrderModal);
   },
 });
 

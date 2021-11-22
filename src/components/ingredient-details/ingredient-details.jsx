@@ -1,15 +1,30 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { unsetSelectedIngredient } from '../../services/slices/select-ingredient-slice';
 import styles from './ingredient-details.module.css';
 
 function IngredientDetails() {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.selectedIngredient);
-  useEffect(() => () => dispatch(unsetSelectedIngredient()), [data, dispatch]);
+  const ingredients = useSelector((state) => state.ingredients.all);
+  const [data, setData] = useState({});
+  const location = useLocation();
+  const backgroundLocation = location.state?.backgroundLocation;
+
+  useEffect(() => {
+    const selectedIngredient = ingredients.find((i) => i._id === id);
+    if (Object.keys(data).length === 0 && selectedIngredient) {
+      setData(selectedIngredient);
+    }
+  }, [ingredients, data, id, dispatch]);
 
   return (
     <figure className={styles.root}>
+      {!backgroundLocation && (
+        <h2 className={`text text_type_main-large ${styles.header}`}>
+          Детали ингредиента
+        </h2>
+      )}
       <img src={data.image_large} alt={data.name} className={styles.picture} />
       <figcaption className="text text_type_main-medium mt-4 mb-8">
         {data.name}

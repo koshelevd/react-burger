@@ -1,11 +1,12 @@
 import { useState, useCallback } from 'react';
+import { TFormErrors, TFormValues } from '../utils/types';
 
-export function useFormWithValidation(defaultValues = {}) {
+export function useFormWithValidation(defaultValues: TFormValues = {}) {
   const [values, setValues] = useState(defaultValues);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<TFormErrors>({});
   const [isValid, setIsValid] = useState(false);
 
-  const handleChange = (evt) => {
+  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const input = evt.target;
     const name = input.name;
     const value = input.value;
@@ -13,7 +14,7 @@ export function useFormWithValidation(defaultValues = {}) {
 
     setValues({ ...values, [name]: value });
     setErrors({ ...errors, [name]: validationMessage });
-    setIsValid(input.closest('form').checkValidity());
+    setIsValid((input.closest('form') as HTMLFormElement).checkValidity());
   };
 
   const resetForm = useCallback(

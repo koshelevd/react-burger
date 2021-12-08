@@ -1,11 +1,12 @@
+import { FC, MouseEventHandler } from 'react';
 import { useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
 import styles from './modal-overlay.module.css';
 import { closeModals } from '../../../services/slices/modal-slice';
+import { IModalOverlayProps } from '../../../utils/types';
 
-function ModalOverlay({ children, closeHandler }) {
+const ModalOverlay:FC<IModalOverlayProps> = ({ children, closeHandler }) => {
   const dispatch = useDispatch();
-  function handleClose(e) {
+  const handleClose: MouseEventHandler<HTMLElement> = (e) => {
     if (e.target === e.currentTarget) {
       !!closeHandler ? closeHandler() : dispatch(closeModals());
     }
@@ -17,10 +18,5 @@ function ModalOverlay({ children, closeHandler }) {
     </section>
   );
 }
-
-ModalOverlay.propTypes = {
-  children: PropTypes.element.isRequired,
-  closeHandler: PropTypes.func,
-};
 
 export default ModalOverlay;

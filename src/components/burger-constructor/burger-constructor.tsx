@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, FC } from 'react';
 import { useNavigate } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
 import {
   Button,
   ConstructorElement,
@@ -16,11 +16,12 @@ import {
 } from '../../services/slices/composition-slice';
 import { checkout } from '../../services/slices/order-slice';
 import { useDrop } from 'react-dnd';
+import { TIngedientId, TIngredient } from '../../utils/types';
 
-const BurgerConstructor = React.memo(() => {
+const BurgerConstructor: FC = React.memo(() => {
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
-    drop(item) {
+    drop(item: TIngredient) {
       handleDrop(item._id);
     },
     collect: (monitor) => ({
@@ -30,17 +31,17 @@ const BurgerConstructor = React.memo(() => {
   const outline = isHover ? '2px dashed lightgreen' : 'none';
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { ingredients } = useSelector((state) => ({
+  const { ingredients } = useSelector((state: RootStateOrAny) => ({
     ingredients: state.ingredients.all,
   }));
-  const { components, activeBun } = useSelector((state) => state.composition);
-  const { isLoggedIn } = useSelector((state) => state.auth);
-  const isModalOpen = useSelector((state) => state.isModalOpen.order);
+  const { components, activeBun } = useSelector((state: RootStateOrAny) => state.composition);
+  const { isLoggedIn } = useSelector((state: RootStateOrAny) => state.auth);
+  const isModalOpen = useSelector((state: RootStateOrAny) => state.isModalOpen.order);
 
-  const totalPrice = useMemo(
+  const totalPrice = useMemo<number>(
     () =>
       components.reduce(
-        (acc, val) => acc + val.price,
+        (acc: number, val: TIngredient) => acc + val.price,
         !!activeBun ? activeBun.price * 2 : 0,
       ),
     [components, activeBun],
@@ -48,13 +49,13 @@ const BurgerConstructor = React.memo(() => {
 
   function handleCheckout() {
     if (!isLoggedIn) return navigate('/login');
-    const composition = [activeBun, ...components, activeBun];
-    const data = composition.map((i) => i._id);
-    dispatch(checkout({ ingredients: data }));
+    const composition: Array<TIngredient> = [activeBun, ...components, activeBun];
+    const data: Array<TIngedientId> = composition.map((i) => i._id);
+    dispatch((checkout as any)({ ingredients: data }));
   }
 
-  function handleDrop(itemId) {
-    const ingredient = ingredients.find((i) => i._id === itemId);
+  function handleDrop(itemId: string) {
+    const ingredient = ingredients.find((i: TIngredient) => i._id === itemId);
     if (ingredient.type !== 'bun') dispatch(addCompositionItem(ingredient));
     else dispatch(selectActiveBun(ingredient));
   }
@@ -82,7 +83,7 @@ const BurgerConstructor = React.memo(() => {
           )}
         </span>
         <ul className={`${styles.scrollArea} mt-4 mb-4`}>
-          {components.map((item, index) => (
+          {components.map((item: TIngredient, index: number) => (
             <DraggableConstructorElement
               item={item}
               index={index}

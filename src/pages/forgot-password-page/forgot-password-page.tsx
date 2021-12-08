@@ -1,22 +1,25 @@
+import { FC, FormEvent } from 'react';
 import { useLocation, Navigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { AuthForm } from '../../components';
 import { forgotPassword } from '../../services/slices/forgot-password-slice';
 import { useFormWithValidation } from '../../hooks/useFormWithValidation';
+import { TFormInfo } from '../../utils/types';
 
-function ForgotPasswordPage() {
+const ForgotPasswordPage: FC = () => {
   const dispatch = useDispatch();
+  
   let location = useLocation();
   const { isRequestSucceded, error } = useSelector(
-    (store) => store.forgotPassword,
+    (store: RootStateOrAny) => store.forgotPassword,
   );
-  const { isLoggedIn } = useSelector((store) => store.auth);
+  const { isLoggedIn } = useSelector((store: RootStateOrAny) => store.auth);
   const { values, handleChange, errors, isValid } = useFormWithValidation({
     email: '',
   });
 
-  const formInfo = [
+  const formInfo: Array<TFormInfo> = [
     {
       text: 'Вспомнили пароль?',
       linkTitle: 'Войти',
@@ -24,9 +27,9 @@ function ForgotPasswordPage() {
     },
   ];
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    dispatch(forgotPassword({ email: values.email }));
+    dispatch((forgotPassword as any)({ email: values.email }));
   }
 
   if (isLoggedIn) return <Navigate to="/login" state={{ from: location }} />;
@@ -51,7 +54,6 @@ function ForgotPasswordPage() {
           error={!!errors.email}
           errorText={errors.email}
           onChange={handleChange}
-          required
         />
       </div>
     </AuthForm>

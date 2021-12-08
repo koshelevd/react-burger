@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { FC, FormEvent, useEffect, useState } from 'react';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import {
   Input,
   Button,
@@ -8,9 +8,9 @@ import { getProfile, patchProfile } from '../../services/slices/auth-slice';
 import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 import styles from './profile-page.module.css';
 
-function ProfilePage() {
+const ProfilePage: FC = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((store) => store.auth);
+  const { user } = useSelector((store: RootStateOrAny) => store.auth);
   const { values, handleChange, errors, resetForm } = useFormWithValidation({
     name: '',
     email: '',
@@ -27,14 +27,14 @@ function ProfilePage() {
     setIsEditPassword(false);
   }
 
-  function handleCancel(e) {
+  function handleCancel(e: FormEvent) {
     e.preventDefault();
     onEditEnd();
   }
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    dispatch(patchProfile(values));
+    dispatch((patchProfile as any)(values));
     onEditEnd();
   }
 

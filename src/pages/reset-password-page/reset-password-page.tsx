@@ -1,5 +1,6 @@
+import { FC, FormEvent } from 'react';
 import { useLocation, Navigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import {
   PasswordInput,
   Input,
@@ -9,13 +10,13 @@ import { resetPassword } from '../../services/slices/reset-password-slice';
 import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 import { FULFILLED_FORGOT_REQUEST_KEY } from '../../utils/constants';
 
-function ResetPasswordPage() {
+const ResetPasswordPage: FC = () => {
   const dispatch = useDispatch();
   let location = useLocation();
   const { isRequestSucceded, error, responseError } = useSelector(
-    (store) => store.resetPassword,
+    (store: RootStateOrAny) => store.resetPassword,
   );
-  const { isLoggedIn } = useSelector((store) => store.auth);
+  const { isLoggedIn } = useSelector((store: RootStateOrAny) => store.auth);
   const { values, handleChange, errors, isValid } = useFormWithValidation({
     password: '',
     token: '',
@@ -30,9 +31,9 @@ function ResetPasswordPage() {
     },
   ];
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    dispatch(resetPassword({ ...values }));
+    dispatch((resetPassword as any)({ ...values }));
   }
 
   if (!isFulfilled)
@@ -51,11 +52,8 @@ function ResetPasswordPage() {
     >
       <div className="mb-6">
         <PasswordInput
-          placeholder="Введите новый пароль"
           value={values.password}
           name="password"
-          error={!!errors.password}
-          errorText={errors.password}
           onChange={handleChange}
         />
       </div>

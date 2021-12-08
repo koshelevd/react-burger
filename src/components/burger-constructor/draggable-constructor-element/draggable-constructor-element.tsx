@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRef } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import { DropTargetMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
 import {
   ConstructorElement,
   DragIcon,
@@ -11,17 +11,17 @@ import {
   removeCompositionItem,
   swapItems,
 } from '../../../services/slices/composition-slice';
-import PropTypes from 'prop-types';
-import { ingredientItemPropType } from '../../../utils/prop-schemas';
+import { IDraggableConstructorElementProps, TIngredient } from '../../../utils/types';
 
-const DraggableConstructorElement = React.memo(({ item, index }) => {
+
+const DraggableConstructorElement: FC<IDraggableConstructorElementProps> = React.memo(({ item, index }) => {
   const id = item.id;
   const dispatch = useDispatch();
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLLIElement>(null);
 
   const swapIngredients = useCallback(
-    (dragIndex, hoverIndex) => {
+    (dragIndex: number, hoverIndex: number) => {
       dispatch(swapItems({ dragIndex, hoverIndex }));
     },
     [dispatch],
@@ -34,7 +34,7 @@ const DraggableConstructorElement = React.memo(({ item, index }) => {
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(item, monitor) {
+    hover(item: TIngredient, monitor: DropTargetMonitor) {
       if (!ref.current) {
         return;
       }
@@ -47,11 +47,8 @@ const DraggableConstructorElement = React.memo(({ item, index }) => {
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      const hoverClientY = (clientOffset as XYCoord).y  - hoverBoundingRect.top;
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
-      }
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return;
       }
       swapIngredients(dragIndex, hoverIndex);
@@ -67,7 +64,7 @@ const DraggableConstructorElement = React.memo(({ item, index }) => {
 
   drag(drop(ref));
 
-  function deleteIngredient(ingredient, index) {
+  function deleteIngredient(ingredient: TIngredient, index: number) {
     dispatch(removeCompositionItem({ index, ingredient }));
   }
 
@@ -87,10 +84,5 @@ const DraggableConstructorElement = React.memo(({ item, index }) => {
     </li>
   );
 });
-
-DraggableConstructorElement.propTypes = {
-  item: ingredientItemPropType.isRequired,
-  index: PropTypes.number.isRequired,
-};
 
 export default DraggableConstructorElement;

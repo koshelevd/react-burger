@@ -1,7 +1,7 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, FC } from 'react';
 import { useDispatch } from 'react-redux';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { Layout, IngredientDetails, Modal, ProfileLayout } from '../.';
+import { Routes, Route, useLocation, useNavigate, Location } from 'react-router-dom';
+import { Layout, IngredientDetails, Modal, ProfileLayout } from '..';
 import {
   ForgotPasswordPage,
   LoginPage,
@@ -11,13 +11,13 @@ import {
   ProfilePage,
   ResetPasswordPage,
 } from '../../pages';
-import { RequireAuth } from '../.';
+import { RequireAuth } from '..';
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
 
-function App() {
+const App: FC = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const backgroundLocation = location.state?.backgroundLocation;
+  const backgroundLocation: Location = location.state?.backgroundLocation;
   const navigate = useNavigate();
 
   const handleModalClose = useCallback(() => {
@@ -69,6 +69,6 @@ function App() {
       )}
     </>
   );
-}
+};
 
 export default App;

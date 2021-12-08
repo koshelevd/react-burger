@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { NavLink, useMatch, Link } from 'react-router-dom';
 import {
   BurgerIcon,
@@ -7,7 +8,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './app-header.module.css';
 
-function AppHeader() {
+const AppHeader: FC = () => {
   const isMainPage = useMatch('/');
   const isFeedPage = useMatch('/feed');
   const isProfilePage = useMatch('/profile/*');

@@ -1,19 +1,20 @@
-import React, { useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useRef, FC } from 'react';
+import { RootStateOrAny, useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard from './ingredient-card/ingredient-card';
 import styles from './burger-ingredients.module.css';
 import { useTopType } from '../../hooks/useTopType';
+import { TIngredient, TIngredientType } from '../../utils/types';
 
-const BurgerIngredients = React.memo(() => {
-  const { ingredients, types } = useSelector((state) => ({
+const BurgerIngredients:FC = React.memo(() => {
+  const { ingredients, types } = useSelector((state: RootStateOrAny) => ({
     ingredients: state.ingredients.all,
     types: state.ingredients.types,
   }));
 
-  const bunRef = useRef();
-  const sauceRef = useRef();
-  const mainRef = useRef();
+  const bunRef = useRef<HTMLDivElement>(null);
+  const sauceRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
   const { listRef, onScroll, topType } = useTopType([
     bunRef,
     sauceRef,
@@ -24,7 +25,7 @@ const BurgerIngredients = React.memo(() => {
     <section className={styles.section}>
       <h2 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h2>
       <div className={styles.tabs}>
-        {types.map((type) => {
+        {types.map((type: TIngredientType) => {
           const ref =
             type.slug === 'bun'
               ? bunRef
@@ -37,7 +38,7 @@ const BurgerIngredients = React.memo(() => {
               value={type.slug}
               active={type.slug === topType}
               onClick={() =>
-                ref.current.scrollIntoView({
+                ref.current?.scrollIntoView({
                   behavior: 'smooth',
                   block: 'nearest',
                   inline: 'nearest',
@@ -50,7 +51,7 @@ const BurgerIngredients = React.memo(() => {
         })}
       </div>
       <div className={styles.scrollArea} ref={listRef} onScroll={onScroll}>
-        {types.map((type, index) => {
+        {types.map((type:TIngredientType, index: number) => {
           const ref =
             type.slug === 'bun'
               ? bunRef
@@ -67,8 +68,8 @@ const BurgerIngredients = React.memo(() => {
               <h2 className="text text_type_main-medium mb-6">{type.title}</h2>
               <ul className={`${styles.cards} pl-4`}>
                 {ingredients
-                  .filter((i) => i.type === type.slug)
-                  .map((i) => (
+                  .filter((i: TIngredient) => i.type === type.slug)
+                  .map((i: TIngredient) => (
                     <li key={i._id}>
                       <IngredientCard data={i} />
                     </li>

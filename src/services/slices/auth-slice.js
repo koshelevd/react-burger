@@ -116,7 +116,7 @@ const authSlice = createSlice({
       .addCase(signIn.rejected, (state, action) => {
         state.signIn.isRequestProcessing = false;
         state.signIn.isRequestFailed = true;
-        state.error = action.payload.message;
+        state.error = action.error.message;
       })
 
       .addCase(signOut.pending, (state) => {
@@ -135,7 +135,7 @@ const authSlice = createSlice({
       .addCase(signOut.rejected, (state, action) => {
         state.signOut.isRequestProcessing = false;
         state.signOut.isRequestFailed = true;
-        state.error = action.payload.message;
+        state.error = action.error.message;
       })
 
       .addCase(getProfile.pending, (state) => {
@@ -154,7 +154,7 @@ const authSlice = createSlice({
       .addCase(getProfile.rejected, (state, action) => {
         state.profile.isRequestProcessing = false;
         state.profile.isRequestFailed = true;
-        state.error = action.payload.message;
+        state.error = action.error.message;
       })
 
       .addCase(patchProfile.pending, (state) => {
@@ -173,7 +173,7 @@ const authSlice = createSlice({
       .addCase(patchProfile.rejected, (state, action) => {
         state.profile.isRequestProcessing = false;
         state.profile.isRequestFailed = true;
-        state.error = action.payload.message;
+        state.error = action.error.message;
       });
   },
 });

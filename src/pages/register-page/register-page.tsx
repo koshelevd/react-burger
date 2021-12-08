@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { FC, FormEvent, useEffect } from 'react';
 import { useLocation, Navigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import {
   Input,
   PasswordInput,
@@ -9,11 +9,11 @@ import { AuthForm } from '../../components';
 import authSlice, { signUp } from '../../services/slices/auth-slice';
 import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 
-function RegisterPage() {
+const RegisterPage: FC = () => {
   const dispatch = useDispatch();
   let location = useLocation();
   const { clearError } = authSlice.actions;
-  const { isLoggedIn, error } = useSelector((store) => store.auth);
+  const { isLoggedIn, error } = useSelector((store: RootStateOrAny) => store.auth);
   const { values, handleChange, errors, isValid } = useFormWithValidation({
     name: '',
     email: '',
@@ -32,9 +32,9 @@ function RegisterPage() {
     dispatch(clearError());
   }, [dispatch, clearError]);
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    dispatch(signUp(values));
+    dispatch((signUp as any)(values));
   }
 
   if (isLoggedIn) return <Navigate to="/" state={{ from: location }} />;
@@ -57,7 +57,6 @@ function RegisterPage() {
           error={!!errors.name}
           errorText={errors.name}
           onChange={handleChange}
-          required
         />
       </div>
       <div className="mb-6">
@@ -69,16 +68,12 @@ function RegisterPage() {
           error={!!errors.email}
           errorText={errors.email}
           onChange={handleChange}
-          required
         />
       </div>
       <div className="mb-6">
         <PasswordInput
-          placeholder="Пароль"
           value={values.password}
           name="password"
-          error={!!errors.password}
-          errorText={errors.password}
           onChange={handleChange}
         />
       </div>

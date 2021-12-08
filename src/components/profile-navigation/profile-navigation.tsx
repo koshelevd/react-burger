@@ -2,15 +2,16 @@ import { NavLink, useMatch, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../../services/slices/auth-slice';
 import styles from './profile-navigation.module.css';
+import { FC, MouseEventHandler } from 'react';
 
-function ProfileNavigation() {
+const ProfileNavigation: FC = () => {
   const isProfilePage = useMatch('/profile');
   const isOrdersPage = useMatch('/profile/orders');
   const navigate = useNavigate();
-  const linkStyle = `${styles.link} text text_type_main-medium text_color_inactive`;
+  const linkStyle: string = `${styles.link} text text_type_main-medium text_color_inactive`;
 
   const dispatch = useDispatch();
-  const logout = (e) => {
+  const logout: MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
     dispatch(signOut());
     return navigate('/login');

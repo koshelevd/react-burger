@@ -1,5 +1,4 @@
 import React, { useCallback, FC } from 'react';
-import { useDispatch } from 'react-redux';
 import { useRef } from 'react';
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
 import {
@@ -12,11 +11,12 @@ import {
   swapItems,
 } from '../../../services/slices/composition-slice';
 import { IDraggableConstructorElementProps, TIngredient } from '../../../utils/types';
+import { useAppDispatch } from '../../../services/store';
 
 
 const DraggableConstructorElement: FC<IDraggableConstructorElementProps> = React.memo(({ item, index }) => {
   const id = item.id;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const ref = useRef<HTMLLIElement>(null);
 

@@ -1,26 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { v4 as uuid } from 'uuid';
+import { ICompositionState } from '../../utils/types';
 import { checkout } from './order-slice';
 
 const initialState = {
   components: [],
   activeBun: null,
-};
+} as ICompositionState;
 
 const compositionSlice = createSlice({
   name: 'composition',
   initialState,
   reducers: {
-    addCompositionItem: {
-      reducer: (state, action) => {
-        state.components.push(action.payload);
-      },
-      prepare: (ingredient) => ({
-        payload: {
-          ...ingredient,
-          uuid: uuid(),
-        },
-      }),
+    addCompositionItem(state, action) {
+      state.components.push({ ...action.payload, uuid: uuid() });
     },
     removeCompositionItem(state, action) {
       state.components.splice(action.payload.index, 1);

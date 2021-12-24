@@ -14,14 +14,14 @@ export type TUrl = string;
 
 export type TEndpoint = string;
 
-export type TRequestData<TDataKey extends string = '', TDataType = {}> = {
+export type TRequestData<TDataKey extends string, TDataType> = {
   [key in TDataKey]: TDataType;
 };
 
 export type TIngedientId = string;
 
 export type TOrderData = {
-  ingredients: Array<TIngedientId>;
+  ingredients: Array<TIngedientId | undefined>;
 };
 
 export type TIngredientType = {
@@ -50,9 +50,9 @@ export type TIngredient = {
 
 export type TUser = {
   readonly name: string;
-  readonly email: string; 
-  readonly password?: string 
-} 
+  readonly email: string;
+  readonly password?: string;
+};
 
 export type THeaders = {
   Accept?: string;
@@ -89,10 +89,11 @@ export interface IApiOptions {
 export interface IApiResponse extends Response {
   readonly refreshToken?: string;
   readonly accessToken?: string;
-  readonly order?: TResponseBody;
-  readonly success?: boolean;
+  readonly order?: TOrder;
+  readonly success: boolean;
   readonly message?: string;
   readonly user?: TUser;
+  readonly data?: Array<TIngredient>;
 }
 
 export interface IAuthFormProps {
@@ -101,7 +102,7 @@ export interface IAuthFormProps {
   formInfo?: Array<TFormInfo>;
   onSubmit: FormEventHandler<HTMLFormElement> | undefined;
   isValid: boolean;
-  error?: string;
+  error?: string | null;
 }
 
 export interface IDraggableConstructorElementProps {
@@ -127,36 +128,60 @@ export interface IRequireAuthProps {
 }
 
 type TOrder = {
-  number?: string;
+  _id: string;
+  number: number;
+  price: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+  owner: TUser;
+  ingredients: Array<TIngredient>;
 };
 
 export interface IOrderState {
-  info: TOrder;
+  info: TOrder | undefined;
   isRequestProcessing: boolean;
   isRequestFailed: boolean;
-  error: SerializedError | null;
-}
-
-export interface IForgotPasswordState {
-  isRequestProcessing: boolean;
-  isRequestFailed: boolean;
-  isRequestSucceded: boolean;
   error: SerializedError | null;
 }
 
 type TRequestStatus = {
   isRequestProcessing: boolean;
   isRequestFailed: boolean;
+  isRequestSucceded: boolean;
 };
 
 export interface IAuthState {
   isLoggedIn: boolean;
-  user: TUser;
+  user: TUser | null | undefined;
   profile: TRequestStatus;
   signUp: TRequestStatus;
   signIn: TRequestStatus;
   signOut: TRequestStatus;
-  error: SerializedError | null;
+  error: string | null | undefined;
+}
+
+export interface IPasswordState {
+  isRequestProcessing: boolean;
+  isRequestFailed: boolean;
+  isRequestSucceded: boolean;
+  error: string | null | undefined;
+  responseError?: string | null | undefined;
+}
+
+export interface IIngredientState {
+  all: Array<TIngredient> | undefined;
+  types: Array<TIngredientType>;
+  isRequestProcessing: boolean;
+  isRequestFailed: boolean;
+  isRequestSucceded: boolean;
+  error: string | null | undefined;
+}
+
+export interface ICompositionState {
+  components: Array<TIngredient>;
+  activeBun: TIngredient | null;
 }
 
 export interface IUseTopType {

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, FC } from 'react';
-import { useDispatch } from 'react-redux';
 import { Routes, Route, useLocation, useNavigate, Location } from 'react-router-dom';
 import { Layout, IngredientDetails, Modal, ProfileLayout } from '..';
 import {
@@ -13,10 +12,11 @@ import {
 } from '../../pages';
 import { RequireAuth } from '..';
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
+import { useAppDispatch } from '../../services/store';
 
 const App: FC = () => {
   const location = useLocation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const backgroundLocation: Location = location.state?.backgroundLocation;
   const navigate = useNavigate();
 

@@ -9,3 +9,5 @@ export { default as ProfileNavigation } from './profile-navigation/profile-navig
 export { default as RequireAuth } from './require-auth/require-auth';
 export { default as Layout } from './layout/layout';
 export { default as ProfileLayout } from './profile-layout/profile-layout';
+export { default as FeedList } from './feed-list/feed-list';
+export { default as FeedSummary } from './feed-summary/feed-summary';

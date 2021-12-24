@@ -1,0 +1,29 @@
+.section {
+  max-height: 912px;
+  max-width: 580px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  outline: red 1px solid;
+  margin-left: 72px;
+  margin-top: 102px;
+}
+
+.topContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.column {
+  max-width: 272px;
+  width: 100%;
+}
+
+.list {
+  padding: 0;
+  list-style: none;
+}
+
+.orderNumber {
+  color: #0cc;
+}

@@ -5,6 +5,7 @@ import {
   ForgotPasswordPage,
   LoginPage,
   MainPage,
+  FeedPage,
   NotFoundPage,
   RegisterPage,
   ProfilePage,
@@ -33,6 +34,7 @@ const App: FC = () => {
       <Routes location={backgroundLocation || location}>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<MainPage />} />
+          <Route path="feed" element={<FeedPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />

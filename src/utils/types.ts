@@ -114,6 +114,15 @@ export interface IIngredientCardProps {
   data: TIngredient;
 }
 
+export interface IIngredientPreviewProps {
+  data: TIngredient;
+  count?: number;
+}
+
+export interface IOrderCardProps {
+  data: TOrder;
+}
+
 export interface IModalProps {
   header?: string;
   closeHandler?: () => void;
@@ -127,7 +136,7 @@ export interface IRequireAuthProps {
   redirectTo?: string;
 }
 
-type TOrder = {
+export type TOrder = {
   _id: string;
   number: number;
   price: number;

@@ -1,4 +1,5 @@
 export { default as MainPage } from './main-page/main-page';
+export { default as FeedPage } from './feed-page/feed-page';
 export { default as LoginPage } from './login-page/login-page';
 export { default as RegisterPage } from './register-page/register-page';
 export { default as ForgotPasswordPage } from './forgot-password-page/forgot-password-page';

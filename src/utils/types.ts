@@ -114,6 +114,10 @@ export interface IIngredientCardProps {
   data: TIngredient;
 }
 
+export interface IOrderItemProps {
+  data: TIngredient;
+}
+
 export interface IIngredientPreviewProps {
   data: TIngredient;
   count?: number;

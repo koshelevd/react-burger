@@ -6,6 +6,7 @@
   background-color: #000;
   padding: 4px;
   position: relative;
+  box-sizing: border-box;
 }
 
 .image {

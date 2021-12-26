@@ -3,7 +3,7 @@ import styles from './ingredient-preview.module.css';
 import { IIngredientPreviewProps } from '../../../utils/types';
 
 const IngredientPreview: FC<IIngredientPreviewProps> = React.memo(
-  ({ data, count = 3 }) => {
+  ({ data, count }) => {
     return (
       <div className={styles.root}>
         <img src={data.image_mobile} alt={data.name} className={styles.image} />

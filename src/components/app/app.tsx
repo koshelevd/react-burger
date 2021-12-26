@@ -1,11 +1,18 @@
 import { useCallback, useEffect, FC } from 'react';
-import { Routes, Route, useLocation, useNavigate, Location } from 'react-router-dom';
-import { Layout, IngredientDetails, Modal, ProfileLayout } from '..';
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Location,
+} from 'react-router-dom';
+import { Layout, IngredientDetails, Modal, ProfileLayout, OrderInfo } from '..';
 import {
   ForgotPasswordPage,
   LoginPage,
   MainPage,
   FeedPage,
+  OrdersPage,
   NotFoundPage,
   RegisterPage,
   ProfilePage,
@@ -33,8 +40,11 @@ const App: FC = () => {
     <>
       <Routes location={backgroundLocation || location}>
         <Route path="/" element={<Layout />}>
-          <Route path="/" element={<MainPage />} />
-          <Route path="feed" element={<FeedPage />} />
+          <Route index element={<MainPage />} />
+          <Route path="feed">
+            <Route index element={<FeedPage />} />
+            <Route path=":id" element={<OrderInfo />} />
+          </Route>
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
@@ -48,8 +58,9 @@ const App: FC = () => {
             }
           >
             <Route index element={<ProfilePage />} />
-            <Route path="orders" element={<></>} />
+            <Route path="orders" element={<OrdersPage />} />
           </Route>
+          <Route path="/profile/orders/:id" element={<OrderInfo />} />
           <Route path="/ingredients/:id" element={<IngredientDetails />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
@@ -64,6 +75,22 @@ const App: FC = () => {
                 closeHandler={handleModalClose}
               >
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal closeHandler={handleModalClose}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <Modal closeHandler={handleModalClose}>
+                <OrderInfo />
               </Modal>
             }
           />

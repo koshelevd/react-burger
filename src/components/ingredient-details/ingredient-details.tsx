@@ -9,9 +9,7 @@ import { useAppDispatch } from '../../services/store';
 const IngredientDetails: FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const ingredients = useSelector(
-    (state: TRootState) => state.ingredients.all,
-  );
+  const ingredients = useSelector((state: TRootState) => state.ingredients.all);
   const [data, setData] = useState<TIngredient | null>(null);
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;

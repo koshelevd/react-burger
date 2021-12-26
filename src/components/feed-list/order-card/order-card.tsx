@@ -9,12 +9,16 @@ const OrderCard: FC<IOrderCardProps> = React.memo(({ data }) => {
   return (
     <article className={`${styles.root} pt-6 pb-6 pl-6 pr-6`}>
       <div className={styles.container}>
-        <p className="text text_type_digits-default">#0{data.number}</p>
+        <p className="text text_type_digits-default text_color_primary">
+          #0{data.number}
+        </p>
         <p className="text text_type_main-default text_color_inactive">
           {data.createdAt}
         </p>
       </div>
-      <h2 className={`${styles.name} text text_type_main-medium mt-6 mb-6`}>
+      <h2
+        className={`${styles.name} text text_type_main-medium mt-6 mb-6 text_color_primary`}
+      >
         {data.name}
       </h2>
       <div className={styles.container}>

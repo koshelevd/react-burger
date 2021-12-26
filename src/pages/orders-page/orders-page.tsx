@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import OrderCard from './order-card/order-card';
-import styles from './feed-list.module.css';
+import OrderCard from '../../components/feed-list/order-card/order-card';
+import styles from './orders-page.module.css';
 import { TUser } from '../../utils/types';
 import { TOrder } from '../../utils/types';
 
@@ -356,16 +356,15 @@ const orders: Array<TOrder> = [
   },
 ];
 
-const FeedList: FC = React.memo(() => {
+const OrdersPage: FC = React.memo(() => {
   const location = useLocation();
   return (
     <section className={styles.section}>
-      <h2 className="text text_type_main-large mt-10 mb-5">Лента заказов</h2>
       <ul className={styles.scrollArea}>
         {orders.map((order) => (
           <li key={order._id} className={styles.item}>
             <Link
-              to={`/feed/${order._id}`}
+              to={`/profile/orders/${order._id}`}
               state={{ backgroundLocation: location }}
               className={styles.link}
             >
@@ -378,4 +377,4 @@ const FeedList: FC = React.memo(() => {
   );
 });
 
-export default FeedList;
+export default OrdersPage;

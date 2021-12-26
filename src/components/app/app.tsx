@@ -1,4 +1,4 @@
-import { useCallback, useEffect, FC } from 'react';
+import { useCallback, useEffect, FC, useState } from 'react';
 import {
   Routes,
   Route,
@@ -21,12 +21,33 @@ import {
 import { RequireAuth } from '..';
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
 import { useAppDispatch } from '../../services/store';
+import { css } from '@emotion/react';
+import HashLoader from 'react-spinners/HashLoader';
+import ModalOverlay from '../../components/modal/modal-overlay/modal-overlay';
+import { useSelector } from 'react-redux';
+import { TRootState } from '../../services/rootReducer';
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: '#0cc';
+  z-index: 100;
+`;
 
 const App: FC = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const backgroundLocation: Location = location.state?.backgroundLocation;
   const navigate = useNavigate();
+  const { isIngredientsLoading, isOrderLoading, isFeedLoading } = useSelector(
+    (state: TRootState) => ({
+      isIngredientsLoading: state.ingredients.isRequestProcessing,
+      isOrderLoading: state.order.isRequestProcessing,
+      isFeedLoading: state.feed.isRequestProcessing,
+    }),
+  );
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleModalClose = useCallback(() => {
     navigate(-1);
@@ -35,6 +56,10 @@ const App: FC = () => {
   useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
+
+  useEffect(() => {
+    setIsLoading(isIngredientsLoading || isOrderLoading || isFeedLoading);
+  }, [isIngredientsLoading, isOrderLoading, isFeedLoading]);
 
   return (
     <>
@@ -95,6 +120,16 @@ const App: FC = () => {
             }
           />
         </Routes>
+      )}
+      {isLoading && (
+        <ModalOverlay>
+          <HashLoader
+            color="#0cc"
+            loading={isLoading}
+            css={override}
+            size={150}
+          />
+        </ModalOverlay>
       )}
     </>
   );

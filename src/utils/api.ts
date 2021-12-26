@@ -38,8 +38,6 @@ class Api {
     this.signOutUrl = baseUrl + endpoints.signOut;
     this.refreshTokenUrl = baseUrl + endpoints.refreshToken;
     this.profileUrl = baseUrl + endpoints.profile;
-    // this.headers = new Headers();
-    // this.headers.set('Accept', 'application/json')
     this.headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json; charset=utf-8',
@@ -101,7 +99,9 @@ class Api {
     });
   }
 
-  public patchUserInfo(data: TRequestData<string, string>): Promise<IApiResponse> {
+  public patchUserInfo(
+    data: TRequestData<string, string>,
+  ): Promise<IApiResponse> {
     // Change user's profile info.
     const token = getCookie(ACCESS_TOKEN_COOKIE_NAME);
     return this._retriableFetch(this.profileUrl, {
@@ -135,18 +135,22 @@ class Api {
   }
 
   // Post data to obtain verification token for pass reset.
-  public forgotPassword = (data: TRequestData<string, string>): Promise<IApiResponse> =>
-    this._postRequest(this.forgotPasswordUrl, data);
+  public forgotPassword = (
+    data: TRequestData<string, string>,
+  ): Promise<IApiResponse> => this._postRequest(this.forgotPasswordUrl, data);
 
   // Post data to reset password.
-  public resetPassword = (data: TRequestData<string, string>): Promise<IApiResponse> =>
-    this._postRequest(this.resetPasswordUrl, data);
+  public resetPassword = (
+    data: TRequestData<string, string>,
+  ): Promise<IApiResponse> => this._postRequest(this.resetPasswordUrl, data);
 
   // Post data to register new user.
-  public signUp = (data: TRequestData<string, string>): Promise<IApiResponse> => this._postRequest(this.signUpUrl, data);
+  public signUp = (data: TRequestData<string, string>): Promise<IApiResponse> =>
+    this._postRequest(this.signUpUrl, data);
 
   // Post data to login user.
-  public signIn = (data: TRequestData<string, string>): Promise<IApiResponse> => this._postRequest(this.signInUrl, data);
+  public signIn = (data: TRequestData<string, string>): Promise<IApiResponse> =>
+    this._postRequest(this.signInUrl, data);
 
   // Post data to logout user.
   public signOut = (): Promise<IApiResponse> =>

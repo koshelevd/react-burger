@@ -9,7 +9,9 @@ const IngredientPreview: FC<IIngredientPreviewProps> = React.memo(
         <img src={data.image_mobile} alt={data.name} className={styles.image} />
         {count && (
           <div className={`${styles.cover} `}>
-            <p className="text text_type_main-small">+{count}</p>
+            <p className="text text_type_main-default  text_color_primary">
+              +{count}
+            </p>
           </div>
         )}
       </div>

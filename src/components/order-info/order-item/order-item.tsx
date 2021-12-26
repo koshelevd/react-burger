@@ -13,7 +13,7 @@ const OrderItem: FC<IOrderItemProps> = React.memo(({ data }) => {
       </h3>
       <p className={styles.price}>
         <span className="text text_type_digits-default text_color_primary mr-2">
-          {data.price}
+          {data.count} x {data.price}
         </span>
         <CurrencyIcon type="primary" />
       </p>

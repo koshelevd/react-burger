@@ -114,8 +114,10 @@ export interface IIngredientCardProps {
   data: TIngredient;
 }
 
+export type TIngredientCount = TIngredient & { count?: number };
+
 export interface IOrderItemProps {
-  data: TIngredient;
+  data: TIngredientCount;
 }
 
 export interface IIngredientPreviewProps {
@@ -147,9 +149,9 @@ export type TOrder = {
   name: string;
   createdAt: string;
   updatedAt: string;
-  status: string;
+  status: 'created' | 'pending' | 'done';
   owner: TUser;
-  ingredients: Array<TIngredient>;
+  ingredients: Array<TIngedientId>;
 };
 
 export interface IOrderState {
@@ -175,12 +177,27 @@ export interface IAuthState {
   error: string | null | undefined;
 }
 
+export interface IWebsocketState {
+  wsConnected: boolean;
+  wsError: boolean;
+}
+
 export interface IPasswordState {
   isRequestProcessing: boolean;
   isRequestFailed: boolean;
   isRequestSucceded: boolean;
   error: string | null | undefined;
   responseError?: string | null | undefined;
+}
+
+export interface IFeedState {
+  all: Array<TOrder>;
+  total: number;
+  totalToday: number;
+  isRequestProcessing: boolean;
+  isRequestFailed: boolean;
+  isRequestSucceded: boolean;
+  error: string | null | undefined;
 }
 
 export interface IIngredientState {

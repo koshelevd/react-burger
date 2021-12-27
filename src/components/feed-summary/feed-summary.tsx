@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { TRootState } from '../../services/rootReducer';
+import { useAppSelector } from '../../services/store';
 import styles from './feed-summary.module.css';
 
 const FeedSummary: FC = React.memo(() => {
-  const { orders, total, totalToday } = useSelector((state: TRootState) => ({
+  const { orders, total, totalToday } = useAppSelector((state: TRootState) => ({
     orders: state.feed.all,
     total: state.feed.total,
     totalToday: state.feed.totalToday,

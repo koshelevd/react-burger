@@ -1,6 +1,5 @@
 import React, { useMemo, FC } from 'react';
 import { useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
 import {
   Button,
   ConstructorElement,
@@ -17,7 +16,7 @@ import {
 import { checkout } from '../../services/slices/order-slice';
 import { useDrop } from 'react-dnd';
 import { TIngredient } from '../../utils/types';
-import { useAppDispatch } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 import { TRootState } from '../../services/rootReducer';
 
 const BurgerConstructor: FC = React.memo(() => {
@@ -33,12 +32,12 @@ const BurgerConstructor: FC = React.memo(() => {
   const outline = isHover ? '2px dashed lightgreen' : 'none';
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { ingredients } = useSelector((state: TRootState) => ({
+  const { ingredients } = useAppSelector((state: TRootState) => ({
     ingredients: state.ingredients.all,
   }));
-  const { components, activeBun } = useSelector((state: TRootState) => state.composition);
-  const { isLoggedIn } = useSelector((state: TRootState) => state.auth);
-  const isModalOpen = useSelector((state: TRootState) => state.isModalOpen.order);
+  const { components, activeBun } = useAppSelector((state: TRootState) => state.composition);
+  const { isLoggedIn } = useAppSelector((state: TRootState) => state.auth);
+  const isModalOpen = useAppSelector((state: TRootState) => state.isModalOpen.order);
 
   const totalPrice = useMemo<number>(
     () =>

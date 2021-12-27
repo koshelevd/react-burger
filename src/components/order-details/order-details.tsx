@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
 import styles from './order-details.module.css';
 import doneIcon from '../../assets/images/done.png';
 import { TRootState } from '../../services/rootReducer';
+import { useAppSelector } from '../../services/store';
 
 const OrderDetails: FC = () => {
-  const orderId = useSelector((state: TRootState) => state.order.info?.number)
+  const orderId = useAppSelector((state: TRootState) => state.order.info?.number)
   return (
     <article className={`${styles.root}`}>
       <p className={`${styles.order} text text_type_digits-large mt-20 mb-8`}>

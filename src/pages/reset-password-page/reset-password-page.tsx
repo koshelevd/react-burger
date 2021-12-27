@@ -1,6 +1,5 @@
 import { FC, FormEvent } from 'react';
 import { useLocation, Navigate } from 'react-router';
-import { useSelector } from 'react-redux';
 import {
   PasswordInput,
   Input,
@@ -10,15 +9,15 @@ import { resetPassword } from '../../services/slices/reset-password-slice';
 import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 import { FULFILLED_FORGOT_REQUEST_KEY } from '../../utils/constants';
 import { TRootState } from '../../services/rootReducer';
-import { useAppDispatch } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 const ResetPasswordPage: FC = () => {
   const dispatch = useAppDispatch();
   let location = useLocation();
-  const { isRequestSucceded, error, responseError } = useSelector(
+  const { isRequestSucceded, error, responseError } = useAppSelector(
     (store: TRootState) => store.resetPassword,
   );
-  const { isLoggedIn } = useSelector((store: TRootState) => store.auth);
+  const { isLoggedIn } = useAppSelector((store: TRootState) => store.auth);
   const { values, handleChange, errors, isValid } = useFormWithValidation({
     password: '',
     token: '',

@@ -29,6 +29,10 @@ export type TIngredientType = {
   title: string;
 };
 
+export type TCookiesProps = {
+  expires?: Date | number | string;
+} & { [key: string]: string };
+
 export type TIngredient = {
   id?: TIngedientId;
   index: number;

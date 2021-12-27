@@ -1,22 +1,21 @@
 import { FC, FormEvent } from 'react';
 import { useLocation, Navigate } from 'react-router';
-import { useSelector } from 'react-redux';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { AuthForm } from '../../components';
 import { forgotPassword } from '../../services/slices/forgot-password-slice';
 import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 import { TFormInfo } from '../../utils/types';
 import { TRootState } from '../../services/rootReducer';
-import { useAppDispatch } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 const ForgotPasswordPage: FC = () => {
   const dispatch = useAppDispatch();
 
   let location = useLocation();
-  const { isRequestSucceded, error } = useSelector(
+  const { isRequestSucceded, error } = useAppSelector(
     (store: TRootState) => store.forgotPassword,
   );
-  const { isLoggedIn } = useSelector((store: TRootState) => store.auth);
+  const { isLoggedIn } = useAppSelector((store: TRootState) => store.auth);
   const { values, handleChange, errors, isValid } = useFormWithValidation({
     email: '',
   });

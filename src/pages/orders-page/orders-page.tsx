@@ -1,17 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import OrderCard from '../../components/feed-list/order-card/order-card';
 import { TRootState } from '../../services/rootReducer';
 import { loadUserFeed, closeFeed } from '../../services/slices/feed-slice';
-import { useAppDispatch } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 import { TOrder } from '../../utils/types';
 import styles from './orders-page.module.css';
 
 const OrdersPage: FC = React.memo(() => {
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { orders } = useSelector((state: TRootState) => ({
+  const { orders } = useAppSelector((state: TRootState) => ({
     orders: state.feed.all,
   }));
   const [reversedOrders, setReversedOrders] = useState<Array<TOrder>>([]);

@@ -20,11 +20,10 @@ import {
 } from '../../pages';
 import { RequireAuth } from '..';
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
-import { useAppDispatch } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 import { css } from '@emotion/react';
 import HashLoader from 'react-spinners/HashLoader';
 import ModalOverlay from '../../components/modal/modal-overlay/modal-overlay';
-import { useSelector } from 'react-redux';
 import { TRootState } from '../../services/rootReducer';
 
 const override = css`
@@ -39,7 +38,7 @@ const App: FC = () => {
   const dispatch = useAppDispatch();
   const backgroundLocation: Location = location.state?.backgroundLocation;
   const navigate = useNavigate();
-  const { isIngredientsLoading, isOrderLoading, isFeedLoading } = useSelector(
+  const { isIngredientsLoading, isOrderLoading, isFeedLoading } = useAppSelector(
     (state: TRootState) => ({
       isIngredientsLoading: state.ingredients.isRequestProcessing,
       isOrderLoading: state.order.isRequestProcessing,

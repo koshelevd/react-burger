@@ -3,20 +3,19 @@ import styles from './order-card.module.css';
 import { IOrderCardProps, TIngredient } from '../../../utils/types';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientPreview from '../ingredient-preview/ingredient-preview';
-import { useSelector } from 'react-redux';
 import { TRootState } from '../../../services/rootReducer';
 import formatDate from '../../../utils/date';
 import { useLocation } from 'react-router-dom';
 import getStatus from '../../../utils/status';
+import { useAppSelector } from '../../../services/store';
 
 const OrderCard: FC<IOrderCardProps> = React.memo(({ data }) => {
   const location = useLocation();
   const showStatus = location.pathname.includes('/profile/orders');
-  console.log({ showStatus });
   const statusColorStyle =
     data?.status === 'done' ? styles.statusDone : 'text_color_primary';
 
-  const { allIngredients } = useSelector((state: TRootState) => ({
+  const { allIngredients } = useAppSelector((state: TRootState) => ({
     allIngredients: state.ingredients.all,
   }));
 

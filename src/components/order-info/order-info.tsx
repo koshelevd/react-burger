@@ -4,17 +4,16 @@ import styles from './order-info.module.css';
 import { TOrder, TIngredientCount } from '../../utils/types';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderItem } from '..';
-import { useSelector } from 'react-redux';
 import { TRootState } from '../../services/rootReducer';
 import formatDate from '../../utils/date';
-import { useAppDispatch } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 import { loadFeed, closeFeed } from '../../services/slices/feed-slice';
 import getStatus from '../../utils/status';
 
 const OrderInfo: FC = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
-  const { orders, allIngredients } = useSelector((state: TRootState) => ({
+  const { orders, allIngredients } = useAppSelector((state: TRootState) => ({
     orders: state.feed.all,
     allIngredients: state.ingredients.all,
   }));

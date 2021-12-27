@@ -1,6 +1,5 @@
 import { FC, FormEvent, useEffect } from 'react';
 import { useLocation, Navigate } from 'react-router';
-import { useSelector } from 'react-redux';
 import {
   Input,
   PasswordInput,
@@ -9,13 +8,13 @@ import { AuthForm } from '../../components';
 import authSlice, { signUp } from '../../services/slices/auth-slice';
 import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 import { TRootState } from '../../services/rootReducer';
-import { useAppDispatch } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 const RegisterPage: FC = () => {
   const dispatch = useAppDispatch();
   let location = useLocation();
   const { clearError } = authSlice.actions;
-  const { isLoggedIn, error } = useSelector((store: TRootState) => store.auth);
+  const { isLoggedIn, error } = useAppSelector((store: TRootState) => store.auth);
   const { values, handleChange, errors, isValid } = useFormWithValidation({
     name: '',
     email: '',

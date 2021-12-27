@@ -1,14 +1,14 @@
 import React, { useRef, FC } from 'react';
-import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard from './ingredient-card/ingredient-card';
 import styles from './burger-ingredients.module.css';
 import { useTopType } from '../../hooks/useTopType';
 import { TIngredient, TIngredientType } from '../../utils/types';
 import { TRootState } from '../../services/rootReducer';
+import { useAppSelector } from '../../services/store';
 
 const BurgerIngredients:FC = React.memo(() => {
-  const { ingredients, types } = useSelector((state: TRootState) => ({
+  const { ingredients, types } = useAppSelector((state: TRootState) => ({
     ingredients: state.ingredients.all,
     types: state.ingredients.types,
   }));

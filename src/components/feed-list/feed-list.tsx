@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import OrderCard from './order-card/order-card';
 import styles from './feed-list.module.css';
-import { useSelector } from 'react-redux';
 import { TRootState } from '../../services/rootReducer';
+import { useAppSelector } from '../../services/store';
 
 const FeedList: FC = React.memo(() => {
   const location = useLocation();
-  const { orders } = useSelector((state: TRootState) => ({
+  const { orders } = useAppSelector((state: TRootState) => ({
     orders: state.feed.all,
   }));
 

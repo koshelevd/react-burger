@@ -5,7 +5,7 @@ import { setCookie } from '../../utils/cookies';
 import {
   ACCESS_TOKEN_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_NAME,
-  WS_API_URL_USER_ORSERS,
+  WS_API_URL_USER_ORDERS,
 } from '../../utils/constants';
 import feedSlice from '../slices/feed-slice';
 
@@ -28,7 +28,7 @@ export const socketMiddleware = () => {
       if (type === wsConnectionStart.type) {
         const wsUrl: string = payload.token
           ? `${payload.url}?token=${payload.token}`
-          : `${payload.url}`;
+          : `${payload.url}`;      
         socket = new WebSocket(wsUrl);
       }
 
@@ -63,15 +63,14 @@ export const socketMiddleware = () => {
                   const wsToken = res.accessToken?.split('Bearer ')[1];
                   setCookie(ACCESS_TOKEN_COOKIE_NAME, wsToken);
                   setCookie(REFRESH_TOKEN_COOKIE_NAME, res.refreshToken);
-                  const wsUrl: string = `${WS_API_URL_USER_ORSERS}?token=${wsToken}`;
+                  const wsUrl: string = `${WS_API_URL_USER_ORDERS}?token=${wsToken}`;
                   socket = new WebSocket(wsUrl);
                 } else {
                   throw Error(res.message);
                 }
               })
-              .catch((error) => {
+              .catch(() => {
                 dispatch(wsConnectionError());
-                console.log(error);
               });
           }
           dispatch(feedSlice.actions.setData(parsedData));

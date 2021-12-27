@@ -2,12 +2,22 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IFeedState, TOrder } from '../../utils/types';
 import { useAppDispatch } from '../store';
 import websocketSlice from './websocket-slice';
-import { WS_API_URL_ALL_ORDERS } from '../../utils/constants';
+import { WS_API_URL_ALL_ORDERS, WS_API_URL_USER_ORDERS, ACCESS_TOKEN_COOKIE_NAME } from '../../utils/constants';
+import { getCookie } from '../../utils/cookies';
 
 export const loadFeed = () => {
   return (dispatch = useAppDispatch()) => {
     dispatch(
       websocketSlice.actions.wsConnectionStart({ url: WS_API_URL_ALL_ORDERS }),
+    );
+    dispatch(feedSlice.actions.request());
+  };
+};
+
+export const loadUserFeed = () => {
+  return (dispatch = useAppDispatch()) => {
+    dispatch(
+      websocketSlice.actions.wsConnectionStart({ url: WS_API_URL_USER_ORDERS, token: getCookie(ACCESS_TOKEN_COOKIE_NAME) }),
     );
     dispatch(feedSlice.actions.request());
   };

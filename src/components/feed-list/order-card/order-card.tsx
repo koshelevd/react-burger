@@ -6,8 +6,16 @@ import IngredientPreview from '../ingredient-preview/ingredient-preview';
 import { useSelector } from 'react-redux';
 import { TRootState } from '../../../services/rootReducer';
 import formatDate from '../../../utils/date';
+import { useLocation } from 'react-router-dom';
+import getStatus from '../../../utils/status';
 
 const OrderCard: FC<IOrderCardProps> = React.memo(({ data }) => {
+  const location = useLocation();
+  const showStatus = location.pathname.includes('/profile/orders');
+  console.log({ showStatus });
+  const statusColorStyle =
+    data?.status === 'done' ? styles.statusDone : 'text_color_primary';
+
   const { allIngredients } = useSelector((state: TRootState) => ({
     allIngredients: state.ingredients.all,
   }));
@@ -40,11 +48,16 @@ const OrderCard: FC<IOrderCardProps> = React.memo(({ data }) => {
         </p>
       </div>
       <h2
-        className={`${styles.name} text text_type_main-medium mt-6 mb-6 text_color_primary`}
+        className={`${styles.name} text text_type_main-medium mt-6 text_color_primary`}
       >
         {data.name}
       </h2>
-      <div className={styles.container}>
+      {showStatus && (
+        <p className={`text text_type_main-default mt-2 ${statusColorStyle}`}>
+          {getStatus(data.status)}
+        </p>
+      )}
+      <div className={`${styles.container} mt-6`}>
         <ul className={styles.list}>
           {reversedIngredients.map(
             (i, index) =>

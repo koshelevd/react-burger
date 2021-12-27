@@ -28,6 +28,6 @@ const modalSlice = createSlice({
   },
 });
 
-export const { openIngredient, openOrder, closeModals } = modalSlice.actions;
+export const { openOrder, closeModals } = modalSlice.actions;
 
 export default modalSlice.reducer;

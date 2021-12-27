@@ -1,16 +1,16 @@
 import { useEffect, useCallback, FC } from 'react';
-import { useDispatch } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from './modal-overlay/modal-overlay';
 import styles from './modal.module.css';
 import { closeModals } from '../../services/slices/modal-slice';
 import { IModalProps } from '../../utils/types';
+import { useAppDispatch } from '../../services/store';
 
 const modalRoot: HTMLDivElement = document.getElementById('react-modals') as HTMLDivElement;
 
 const Modal: FC<IModalProps> = ({ children, header, closeHandler }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const popupClose = useCallback(() => {
     dispatch(closeModals());
   }, [dispatch]);

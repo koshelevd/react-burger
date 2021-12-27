@@ -1,6 +1,5 @@
 import React, { useMemo, FC } from 'react';
 import { useNavigate } from 'react-router';
-import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
 import {
   Button,
   ConstructorElement,
@@ -16,7 +15,9 @@ import {
 } from '../../services/slices/composition-slice';
 import { checkout } from '../../services/slices/order-slice';
 import { useDrop } from 'react-dnd';
-import { TIngedientId, TIngredient } from '../../utils/types';
+import { TIngredient } from '../../utils/types';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+import { TRootState } from '../../services/rootReducer';
 
 const BurgerConstructor: FC = React.memo(() => {
   const [{ isHover }, dropTarget] = useDrop({
@@ -29,14 +30,14 @@ const BurgerConstructor: FC = React.memo(() => {
     }),
   });
   const outline = isHover ? '2px dashed lightgreen' : 'none';
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { ingredients } = useSelector((state: RootStateOrAny) => ({
+  const { ingredients } = useAppSelector((state: TRootState) => ({
     ingredients: state.ingredients.all,
   }));
-  const { components, activeBun } = useSelector((state: RootStateOrAny) => state.composition);
-  const { isLoggedIn } = useSelector((state: RootStateOrAny) => state.auth);
-  const isModalOpen = useSelector((state: RootStateOrAny) => state.isModalOpen.order);
+  const { components, activeBun } = useAppSelector((state: TRootState) => state.composition);
+  const { isLoggedIn } = useAppSelector((state: TRootState) => state.auth);
+  const isModalOpen = useAppSelector((state: TRootState) => state.isModalOpen.order);
 
   const totalPrice = useMemo<number>(
     () =>
@@ -49,14 +50,14 @@ const BurgerConstructor: FC = React.memo(() => {
 
   function handleCheckout() {
     if (!isLoggedIn) return navigate('/login');
-    const composition: Array<TIngredient> = [activeBun, ...components, activeBun];
-    const data: Array<TIngedientId> = composition.map((i) => i._id);
-    dispatch((checkout as any)({ ingredients: data }));
+    const composition = [activeBun, ...components, activeBun];
+    const data = composition.map((i) => i?._id);
+    dispatch((checkout)({ ingredients: data }));
   }
 
   function handleDrop(itemId: string) {
-    const ingredient = ingredients.find((i: TIngredient) => i._id === itemId);
-    if (ingredient.type !== 'bun') dispatch(addCompositionItem(ingredient));
+    const ingredient = ingredients && ingredients.find((i: TIngredient) => i._id === itemId);
+    if (ingredient?.type !== 'bun') dispatch(addCompositionItem(ingredient));
     else dispatch(selectActiveBun(ingredient));
   }
 

@@ -1,0 +1,43 @@
+.section {
+  max-height: 912px;
+  max-width: 610px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollArea {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-color: #8585ad #2f2f37;
+  scrollbar-width: thin;
+  margin: 0;
+  padding: 0 15px 0 0;
+  list-style: none;
+}
+
+.scrollArea::-webkit-scrollbar {
+  width: 12px;
+}
+.scrollArea::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+.scrollArea::-webkit-scrollbar-thumb {
+  background: #8585ad;
+  border: 3px solid #2f2f37;
+  border-radius: 6px;
+}
+
+.item {
+  margin-top: 16px;
+}
+
+.item:first-of-type {
+  margin-top: 0;
+}
+
+.link {
+  display: block;
+  text-decoration: none;
+}

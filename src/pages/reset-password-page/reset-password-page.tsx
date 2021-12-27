@@ -1,6 +1,5 @@
 import { FC, FormEvent } from 'react';
 import { useLocation, Navigate } from 'react-router';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import {
   PasswordInput,
   Input,
@@ -9,14 +8,16 @@ import { AuthForm } from '../../components';
 import { resetPassword } from '../../services/slices/reset-password-slice';
 import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 import { FULFILLED_FORGOT_REQUEST_KEY } from '../../utils/constants';
+import { TRootState } from '../../services/rootReducer';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 const ResetPasswordPage: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   let location = useLocation();
-  const { isRequestSucceded, error, responseError } = useSelector(
-    (store: RootStateOrAny) => store.resetPassword,
+  const { isRequestSucceded, error, responseError } = useAppSelector(
+    (store: TRootState) => store.resetPassword,
   );
-  const { isLoggedIn } = useSelector((store: RootStateOrAny) => store.auth);
+  const { isLoggedIn } = useAppSelector((store: TRootState) => store.auth);
   const { values, handleChange, errors, isValid } = useFormWithValidation({
     password: '',
     token: '',
@@ -33,7 +34,7 @@ const ResetPasswordPage: FC = () => {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    dispatch((resetPassword as any)({ ...values }));
+    dispatch((resetPassword)({ ...values }));
   }
 
   if (!isFulfilled)

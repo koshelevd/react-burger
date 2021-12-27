@@ -1,21 +1,20 @@
 import { useEffect, useState, FC } from 'react';
 import { useParams, useLocation } from 'react-router';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import styles from './ingredient-details.module.css';
 import { TIngredient } from '../../utils/types';
+import { TRootState } from '../../services/rootReducer';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 const IngredientDetails: FC = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const ingredients = useSelector(
-    (state: RootStateOrAny) => state.ingredients.all,
-  );
+  const dispatch = useAppDispatch();
+  const ingredients = useAppSelector((state: TRootState) => state.ingredients.all);
   const [data, setData] = useState<TIngredient | null>(null);
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
 
   useEffect(() => {
-    const selectedIngredient: TIngredient = ingredients.find(
+    const selectedIngredient: TIngredient | undefined = ingredients?.find(
       (i: TIngredient) => i._id === id,
     );
     if (!data && selectedIngredient) {

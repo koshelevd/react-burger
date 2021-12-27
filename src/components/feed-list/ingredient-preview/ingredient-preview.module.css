@@ -1,0 +1,32 @@
+.root {
+  max-width: 64px;
+  max-height: 64px;
+  border-radius: 50%;
+  border: 2px solid #801ab3;
+  background-color: #000;
+  padding: 4px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.image {
+  width: 52px;
+  height: 52px;
+  display: block;
+  object-fit: cover;
+}
+
+.cover {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1c1c21;
+  opacity: 0.6;
+  margin: 0;
+  left: 2px;
+  top: 2px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}

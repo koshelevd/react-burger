@@ -1,10 +1,11 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 import { getCookie, setCookie, deleteCookie } from '../../utils/cookies';
 import {
   ACCESS_TOKEN_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_NAME,
 } from '../../utils/constants';
+import { IAuthState, IApiResponse, TRequestData } from '../../utils/types';
 
 const initialState = {
   isLoggedIn: !!getCookie(ACCESS_TOKEN_COOKIE_NAME),
@@ -12,57 +13,74 @@ const initialState = {
   profile: {
     isRequestProcessing: false,
     isRequestFailed: false,
+    isRequestSucceded: false,
   },
   signUp: {
     isRequestProcessing: false,
     isRequestFailed: false,
+    isRequestSucceded: false,
   },
   signIn: {
     isRequestProcessing: false,
     isRequestFailed: false,
+    isRequestSucceded: false,
   },
   signOut: {
     isRequestProcessing: false,
     isRequestFailed: false,
+    isRequestSucceded: false,
   },
   error: null,
-};
+} as IAuthState;
 
-export const signUp = createAsyncThunk('signUp', (data) =>
-  api.signUp(data).then((res) => res),
+export const signUp = createAsyncThunk(
+  'signUp',
+  (data: TRequestData<string, string>) =>
+    api.signUp(data).then((res) => res) as Promise<IApiResponse>,
 );
 
-export const signIn = createAsyncThunk('signIn', (data) =>
-  api.signIn(data).then((res) => res),
+export const signIn = createAsyncThunk(
+  'signIn',
+  (data: TRequestData<string, string>) =>
+    api.signIn(data).then((res) => res) as Promise<IApiResponse>,
 );
 
-export const signOut = createAsyncThunk('signOut', (data) =>
-  api.signOut(data).then((res) => res),
+export const signOut = createAsyncThunk(
+  'signOut',
+  () => api.signOut().then((res) => res) as Promise<IApiResponse>,
 );
 
-export const getProfile = createAsyncThunk('getProfile', () =>
-  api.getUserInfo().then((res) => res),
+export const getProfile = createAsyncThunk(
+  'getProfile',
+  () => api.getUserInfo().then((res) => res) as Promise<IApiResponse>,
 );
 
-export const patchProfile = createAsyncThunk('patchProfile', (data) =>
-  api.patchUserInfo(data).then((res) => res),
+export const patchProfile = createAsyncThunk(
+  'patchProfile',
+  (data: TRequestData<string, string>) =>
+    api.patchUserInfo(data).then((res) => res) as Promise<IApiResponse>,
 );
 
-const setLoggedIn = (state, { payload }) => {
-  const authToken = payload?.accessToken.split('Bearer ')[1];
-  const refreshToken = payload?.refreshToken;
+const setLoggedIn = (
+  state: IAuthState,
+  action: PayloadAction<IApiResponse>,
+) => {
+  const authToken =
+    action.payload.accessToken &&
+    action.payload.accessToken.split('Bearer ')[1];
+  const refreshToken = action.payload?.refreshToken;
 
   if (authToken) {
     setCookie(ACCESS_TOKEN_COOKIE_NAME, authToken);
     state.isLoggedIn = true;
-    state.user = payload.user;
+    state.user = action.payload.user;
   }
   if (refreshToken) {
     setCookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken);
   }
 };
 
-const setLoggedOut = (state) => {
+const setLoggedOut = (state: IAuthState) => {
   deleteCookie(ACCESS_TOKEN_COOKIE_NAME);
   deleteCookie(REFRESH_TOKEN_COOKIE_NAME);
   state.isLoggedIn = false;
@@ -79,13 +97,13 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(signUp.pending, (state) => {
+      .addCase(signUp.pending, (state: IAuthState) => {
         state.signUp.isRequestSucceded = false;
         state.signUp.isRequestProcessing = true;
         state.signUp.isRequestFailed = false;
         state.error = null;
       })
-      .addCase(signUp.fulfilled, (state, action) => {
+      .addCase(signUp.fulfilled, (state: IAuthState, action) => {
         if (action.payload.success) {
           setLoggedIn(state, action);
         } else {
@@ -96,7 +114,7 @@ const authSlice = createSlice({
       .addCase(signUp.rejected, (state, action) => {
         state.signUp.isRequestProcessing = false;
         state.signUp.isRequestFailed = true;
-        state.error = action.payload.message;
+        state.error = action.error.message;
       })
 
       .addCase(signIn.pending, (state) => {

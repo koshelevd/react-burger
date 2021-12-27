@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { INGREDIENTS_TYPES } from '../../utils/data';
 import {
   addCompositionItem,
@@ -7,25 +7,30 @@ import {
 } from './composition-slice';
 import { checkout } from './order-slice';
 import api from '../../utils/api';
+import { IApiResponse, IIngredientState, TIngredient } from '../../utils/types';
 
 const initialState = {
   all: [],
   isRequestProcessing: false,
   isRequestFailed: false,
+  isRequestSucceded: false,
   error: null,
   types: INGREDIENTS_TYPES,
-};
+} as IIngredientState;
 
 export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
-  () => api.getIngredients().then((res) => res.data),
+  () => api.getIngredients().then((res) => res) as Promise<IApiResponse>,
 );
 
-function addIngredient(state, action) {
+function addIngredient(
+  state: IIngredientState,
+  action: PayloadAction<TIngredient>,
+) {
   const ingredient = action.payload;
   let result;
   if (ingredient.type === 'bun') {
-    result = state.all.map((i) => {
+    result = state.all && state.all.map((i) => {
       if (i._id === ingredient._id) {
         return { ...i, count: 2 };
       } else if (i.type === 'bun') {
@@ -34,7 +39,7 @@ function addIngredient(state, action) {
       return i;
     });
   } else {
-    result = state.all.map((i) => {
+    result = state.all && state.all.map((i) => {
       if (i._id === ingredient._id && !!i.count) {
         return { ...i, count: i.count + 1 };
       } else if (i._id === ingredient._id) {
@@ -46,15 +51,18 @@ function addIngredient(state, action) {
   state.all = result;
 }
 
-function removeIngredient(state, action) {
-  const ingredient = state.all.find(
+function removeIngredient(
+  state: IIngredientState,
+  action: PayloadAction<{ index: number; ingredient: TIngredient }>,
+) {
+  const ingredient = state.all && state.all.find(
     (i) => i._id === action.payload.ingredient._id,
   );
-  if (ingredient.count) ingredient.count -= 1;
+  if (ingredient && ingredient.count) ingredient.count -= 1;
 }
 
-function clearQuantities(state) {
-  state.all.forEach((ingredient) => {
+function clearQuantities(state: IIngredientState) {
+  state.all && state.all.forEach((ingredient) => {
     ingredient.count = 0;
   });
 }
@@ -62,10 +70,7 @@ function clearQuantities(state) {
 const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
-  reducers: {
-    incrementQuantity: addIngredient,
-    decrementQuantity: removeIngredient,
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
@@ -74,13 +79,13 @@ const ingredientsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
-        state.all = action.payload;
+        state.all = action.payload.data;
         state.isRequestProcessing = false;
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.isRequestProcessing = false;
         state.isRequestFailed = true;
-        state.error = action.error;
+        state.error = action.error.message;
       })
       .addCase(addCompositionItem, addIngredient)
       .addCase(selectActiveBun, addIngredient)
@@ -88,8 +93,5 @@ const ingredientsSlice = createSlice({
       .addCase(checkout.fulfilled, clearQuantities);
   },
 });
-
-export const { incrementQuantity, decrementQuantity } =
-  ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

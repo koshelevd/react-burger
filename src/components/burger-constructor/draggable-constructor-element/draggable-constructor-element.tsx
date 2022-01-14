@@ -70,7 +70,7 @@ const DraggableConstructorElement: FC<IDraggableConstructorElementProps> = React
 
   return (
     <li
-      className={`mb-4 ${styles.element}`}
+      className={`${styles.element} mb-4`}
       ref={ref}
       data-handler-id={handlerId}
     >

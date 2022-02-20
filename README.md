@@ -14,17 +14,28 @@
 * `Cypress`
 
 ## Install
+
+### Install dependencies
 ```
 $ npm install
+```
 
+### Run dev
+```
 $ npm run start
+```
 
-# prod build
+### Prod build
+```
 $ npm run build
+```
 
-# run cypress tests
+### Run cypress tests
+```
 $ npm run cypress:open
+```
 
-# run int tests
+### Run int tests
+```
 $ npm run test
 ```

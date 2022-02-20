@@ -25,6 +25,6 @@ $ npm run build
 # run cypress tests
 $ npm run cypress:open
 
-# зrun int tests
+# run int tests
 $ npm run test
 ```
